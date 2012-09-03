@@ -63,7 +63,7 @@ public class SolarCalculator implements EntryPoint {
 		projectListBox.setVisibleItemCount(1);
 		projectTab.add(projectListBox);
 		projectTab.add(loadButton);
-		inputTabPanel.add(projectTab, "1. Project");
+		inputTabPanel.add(projectTab, "1. Your Project");
 		inputTabPanel.selectTab(0);
 
 		// TODO assemble other tabs
