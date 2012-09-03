@@ -41,11 +41,12 @@ public class SolarCalculator implements EntryPoint {
 			+ indicativePrice + ", Annual output: " + annualOutput
 			+ "kW, Yearly Value: $" + yearlyValue + ", Payback Time: "
 			+ paybackTime + "Years");
-	//project tab
+	//project tab ====================================================================
 	private HorizontalPanel projectTab = new HorizontalPanel();
 	private ListBox projectListBox = new ListBox();
 	private Button loadButton = new Button("Load");
-	//energy use tab
+	
+	//energy use tab ====================================================================
 	private VerticalPanel energyUseVerTab = new VerticalPanel();
 		// Title
 	private Label EnergyUseTitle = new Label("Enter the amount of electricity you use and how much" +
@@ -55,7 +56,7 @@ public class SolarCalculator implements EntryPoint {
 			"electricity you use on a typical day for each month of the year. This is then used " +
 			"to estimate how much renewable energy will be imported and exported from your chosen " +
 			"renewable energy source.");
-		// Energy Use
+		// Energy Use -------------------------------------------------------------------
 	private HorizontalPanel energyUseHorPanel = new HorizontalPanel();
 			// Result
 	private VerticalPanel energyUseResultPanel = new VerticalPanel();
@@ -78,7 +79,7 @@ public class SolarCalculator implements EntryPoint {
 	private Label energyUseCalcInputUnit = new Label("kWh");
 	private Button energyUseCalcButtion = new Button("Calculate Yearly Use");
 	
-		// Average Rate Calculator
+		// Average Rate Calculator-------------------------------------------------------------------
 	private HorizontalPanel supplyInfoHorPanel = new HorizontalPanel();
 			// Rate Result
 	private VerticalPanel supplyInfoResultPanel = new VerticalPanel();
@@ -106,7 +107,8 @@ public class SolarCalculator implements EntryPoint {
 	private TextBox supplyInfoInputSecondLabel4 = new TextBox();
 	private Label supplyInfoInputSecondLabel5 = new Label("p");	
 	private Button supplyInfoInputButtion = new Button("Calculate Import Tariff");
-	//Disclosure
+	
+	//Disclosure ====================================================================
 	private DisclosurePanel notesDisPanel=new DisclosurePanel("Click for notes");
 	private Label noteLabel=new Label("edit note here!");
 
@@ -129,9 +131,12 @@ public class SolarCalculator implements EntryPoint {
 		inputTabPanel.add(projectTab, "1. Your Project");
 		inputTabPanel.selectTab(0);
 		
-		//assemble widgets in energy use tab of input tab panel
-			//Energy Use Horizontal
+		//assemble widgets in energy use tab of input tab panel=============================================
+			//Energy Use ------------------------------------------------
 				// Result panel
+		energyUseProfileListBox.addItem("Domestic Home","1");
+		energyUseProfileListBox.addItem("Comercial Office","2");
+		
 		energyUseProfileHorPanel.add(energyUseProfileLabel);
 		energyUseProfileHorPanel.add(energyUseProfileListBox);
 		energyUseYearTotalPanel.add(energyUseYearTotalLabel);
@@ -141,6 +146,10 @@ public class SolarCalculator implements EntryPoint {
 		energyUseResultPanel.add(energyUseProfileHorPanel);
 		energyUseResultPanel.add(energyUseYearTotalPanel);
 				// Input panel
+		energyUseCalcInputListBox.addItem("Daily Energy Use","1");
+		energyUseCalcInputListBox.addItem("Monthly Energy Use","2");
+		energyUseCalcInputListBox.addItem("Quarterly Energy Use","3");
+		
 		energyUseCalcInputPanel.add(energyUseCalcInputListBox);
 		energyUseCalcInputPanel.add(energyUseCalcInputTextBox);
 		energyUseCalcInputPanel.add(energyUseCalcInputUnit);
@@ -151,9 +160,9 @@ public class SolarCalculator implements EntryPoint {
 			// Energy Use
 		energyUseHorPanel.add(energyUseResultPanel);
 		energyUseHorPanel.add(energyUseCalcSubPanel);
-			// End Energy Use Horizontal
+			// End Energy Use 
 		
-			// Average Rate Calculator
+			// Average Rate Calculator ------------------------------------------------
 				// Output Panel
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputLabel);
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputTextBox);
@@ -177,18 +186,18 @@ public class SolarCalculator implements EntryPoint {
 		supplyInfoInputPanel.add(supplyInfoInputFirstPanel);
 		supplyInfoInputPanel.add(supplyInfoInputSecondPanel);
 		supplyInfoInputPanel.add(supplyInfoInputButtion);
-			// Average Rate Calculator
+			// Average Rate Calculator 
 		supplyInfoHorPanel.add(supplyInfoResultPanel);
 		supplyInfoHorPanel.add(supplyInfoInputPanel);
 			// End Average Rate Calculator
-			// Use vertical panel
+			// Use vertical panel  ------------------------------------------------
 		energyUseVerTab.add(EnergyUseTitle);
 		energyUseVerTab.add(EnergyUseDescription);
 		energyUseVerTab.add(energyUseHorPanel); 
 		energyUseVerTab.add(supplyInfoHorPanel);
 		
 		inputTabPanel.add(energyUseVerTab, "2. Energy Use");	
-		// End energy use tab
+		// End energy use tab =============================================
 		// TODO assemble other tabs
 
 		// assemble DisclosurePanel for notes
