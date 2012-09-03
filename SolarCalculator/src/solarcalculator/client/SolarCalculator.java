@@ -41,9 +41,22 @@ public class SolarCalculator implements EntryPoint {
 			+ indicativePrice + ", Annual output: " + annualOutput
 			+ "kW, Yearly Value: $" + yearlyValue + ", Payback Time: "
 			+ paybackTime + "Years");
+	//project tab
 	private HorizontalPanel projectTab = new HorizontalPanel();
 	private ListBox projectListBox = new ListBox();
 	private Button loadButton = new Button("Load");
+	//energy use tab
+	private VerticalPanel energyUseVerTab = new VerticalPanel();
+	private HorizontalPanel energyUseHorPanel = new HorizontalPanel();
+	private VerticalPanel energyUseSubPanel = new VerticalPanel();
+	private Label energyUseTitleLabel = new Label("Energy Use");
+	private HorizontalPanel energyUseProfileHorPanel=new HorizontalPanel();
+	private Label energyUseProfileLabel= new Label("Energy USe Profile");
+	private ListBox energyUseProfileListBox=new ListBox();
+	private VerticalPanel energyUseCalcSubPanel= new VerticalPanel();
+	private Label energyUseCalcTitleSubLabel=new Label("Energy Use Calculator");
+	private HorizontalPanel supplyInfoHorPanel = new HorizontalPanel();
+	//Disclosure
 	private DisclosurePanel notesDisPanel=new DisclosurePanel("Click for notes");
 	private Label noteLabel=new Label("edit note here!");
 
@@ -65,6 +78,15 @@ public class SolarCalculator implements EntryPoint {
 		projectTab.add(loadButton);
 		inputTabPanel.add(projectTab, "1. Your Project");
 		inputTabPanel.selectTab(0);
+		
+		//assemble widgets in energy use tab of input tab panel
+		energyUseSubPanel.add(energyUseTitleLabel);
+		energyUseHorPanel.add(energyUseSubPanel);
+		energyUseCalcSubPanel.add(energyUseCalcTitleSubLabel);
+		energyUseHorPanel.add(energyUseCalcSubPanel);
+		energyUseVerTab.add(energyUseHorPanel);
+		energyUseVerTab.add(supplyInfoHorPanel);
+		inputTabPanel.add(energyUseVerTab, "2. Energy Use");
 
 		// TODO assemble other tabs
 
