@@ -47,15 +47,65 @@ public class SolarCalculator implements EntryPoint {
 	private Button loadButton = new Button("Load");
 	//energy use tab
 	private VerticalPanel energyUseVerTab = new VerticalPanel();
+		// Title
+	private Label EnergyUseTitle = new Label("Enter the amount of electricity you use and how much" +
+			" you pay for it in the form below.");
+		// Description
+	private Label EnergyUseDescription = new Label("We will use this information to estimate how much " +
+			"electricity you use on a typical day for each month of the year. This is then used " +
+			"to estimate how much renewable energy will be imported and exported from your chosen " +
+			"renewable energy source.");
+		// Energy Use
 	private HorizontalPanel energyUseHorPanel = new HorizontalPanel();
-	private VerticalPanel energyUseSubPanel = new VerticalPanel();
-	private Label energyUseTitleLabel = new Label("Energy Use");
+			// Result
+	private VerticalPanel energyUseResultPanel = new VerticalPanel();
+	private Label energyUseResultTitleLabel = new Label("Energy Use");
 	private HorizontalPanel energyUseProfileHorPanel=new HorizontalPanel();
-	private Label energyUseProfileLabel= new Label("Energy USe Profile");
+	private Label energyUseProfileLabel= new Label("Energy Use Profile");
 	private ListBox energyUseProfileListBox=new ListBox();
+	private HorizontalPanel energyUseYearTotalPanel = new HorizontalPanel();
+	private Label energyUseYearTotalLabel = new Label("Used Yearly");
+	private TextBox energyUseYearTotalBox = new TextBox();
+	private Label energyUseYearTotalUnit = new Label(" kWh/year	");
+			// Input
 	private VerticalPanel energyUseCalcSubPanel= new VerticalPanel();
 	private Label energyUseCalcTitleSubLabel=new Label("Energy Use Calculator");
+	private Label energyUseCalcDecripLabel = new Label("Use this calculator to calculate yearly " +
+			"electricity use if you have the amount used over a different period.");
+	private HorizontalPanel energyUseCalcInputPanel= new HorizontalPanel();
+	private ListBox energyUseCalcInputListBox = new ListBox();
+	private TextBox energyUseCalcInputTextBox = new TextBox();
+	private Label energyUseCalcInputUnit = new Label("kWh");
+	private Button energyUseCalcButtion = new Button("Calculate Yearly Use");
+	
+		// Average Rate Calculator
 	private HorizontalPanel supplyInfoHorPanel = new HorizontalPanel();
+			// Rate Result
+	private VerticalPanel supplyInfoResultPanel = new VerticalPanel();
+	private Label supplyInforResultTitleLabel = new Label();
+	private HorizontalPanel supplyInfoResultOutputPanel = new HorizontalPanel();
+	private Label supplyInfoResultOutputLabel = new Label("Import Tariff");
+	private TextBox supplyInfoResultOutputTextBox = new TextBox();
+	private Label supplyInfoResultOutputUnit = new Label("p/kWh");
+	private Button supplyInfoResultButton = new Button("Recalculate Now");
+			// Rate Input
+	private VerticalPanel supplyInfoInputPanel = new VerticalPanel();
+	private Label supplyInfoInputTitle = new Label("Average Rate Calculator");
+	private Label supplyInfoInputDescription = new Label("Use this calculator if your electricity" +
+			" bill gives two prices for electricity. We will calculate an average price per ");
+	private HorizontalPanel supplyInfoInputFirstPanel = new HorizontalPanel();
+	private Label supplyInfoInputFirstLabel1 = new Label("First Rate");
+	private TextBox supplyInfoInputFirstLabel2 = new TextBox();
+	private Label supplyInfoInputFirstLabel3 = new Label("kWh	at ");
+	private TextBox supplyInfoInputFirstLabel4 = new TextBox();
+	private Label supplyInfoInputFirstLabel5 = new Label("p");
+	private HorizontalPanel supplyInfoInputSecondPanel = new HorizontalPanel();
+	private Label supplyInfoInputSecondLabel1 = new Label("First Rate");
+	private TextBox supplyInfoInputSecondLabel2 = new TextBox();
+	private Label supplyInfoInputSecondLabel3 = new Label("kWh	at ");
+	private TextBox supplyInfoInputSecondLabel4 = new TextBox();
+	private Label supplyInfoInputSecondLabel5 = new Label("p");	
+	private Button supplyInfoInputButtion = new Button("Calculate Import Tariff");
 	//Disclosure
 	private DisclosurePanel notesDisPanel=new DisclosurePanel("Click for notes");
 	private Label noteLabel=new Label("edit note here!");
@@ -80,14 +130,65 @@ public class SolarCalculator implements EntryPoint {
 		inputTabPanel.selectTab(0);
 		
 		//assemble widgets in energy use tab of input tab panel
-		energyUseSubPanel.add(energyUseTitleLabel);
-		energyUseHorPanel.add(energyUseSubPanel);
+			//Energy Use Horizontal
+				// Result panel
+		energyUseProfileHorPanel.add(energyUseProfileLabel);
+		energyUseProfileHorPanel.add(energyUseProfileListBox);
+		energyUseYearTotalPanel.add(energyUseYearTotalLabel);
+		energyUseYearTotalPanel.add(energyUseYearTotalBox);
+		energyUseYearTotalPanel.add(energyUseYearTotalUnit);
+		energyUseResultPanel.add(energyUseResultTitleLabel);
+		energyUseResultPanel.add(energyUseProfileHorPanel);
+		energyUseResultPanel.add(energyUseYearTotalPanel);
+				// Input panel
+		energyUseCalcInputPanel.add(energyUseCalcInputListBox);
+		energyUseCalcInputPanel.add(energyUseCalcInputTextBox);
+		energyUseCalcInputPanel.add(energyUseCalcInputUnit);
 		energyUseCalcSubPanel.add(energyUseCalcTitleSubLabel);
+		energyUseCalcSubPanel.add(energyUseCalcDecripLabel);
+		energyUseCalcSubPanel.add(energyUseCalcInputPanel);
+		energyUseCalcSubPanel.add(energyUseCalcButtion);
+			// Energy Use
+		energyUseHorPanel.add(energyUseResultPanel);
 		energyUseHorPanel.add(energyUseCalcSubPanel);
-		energyUseVerTab.add(energyUseHorPanel);
-		energyUseVerTab.add(supplyInfoHorPanel);
-		inputTabPanel.add(energyUseVerTab, "2. Energy Use");
+			// End Energy Use Horizontal
+		
+			// Average Rate Calculator
+		supplyInfoResultOutputPanel.add(supplyInfoResultOutputLabel);
+		supplyInfoResultOutputPanel.add(supplyInfoResultOutputTextBox);
+		supplyInfoResultOutputPanel.add(supplyInfoResultOutputUnit);
+		supplyInfoResultPanel.add(supplyInforResultTitleLabel);
+		supplyInfoResultPanel.add(supplyInfoResultOutputPanel );
+		supplyInfoResultPanel.add(supplyInfoResultButton);
+		
+		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel1);
+		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel2);
+		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel3);
+		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel4);
+		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel5);
 
+		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel1);
+		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel2);
+		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel3);
+		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel4);
+		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel5);
+		
+		
+		supplyInfoInputPanel.add(supplyInfoInputTitle);
+		supplyInfoInputPanel.add(supplyInfoInputDescription);
+		supplyInfoInputPanel.add(supplyInfoInputFirstPanel);
+		supplyInfoInputPanel.add(supplyInfoInputSecondPanel);
+		supplyInfoInputPanel.add(supplyInfoInputButtion);
+		
+		supplyInfoHorPanel.add(supplyInfoResultPanel);
+		supplyInfoHorPanel.add(supplyInfoInputPanel);
+		
+		energyUseVerTab.add(EnergyUseTitle);
+		energyUseVerTab.add(EnergyUseDescription);
+		energyUseVerTab.add(energyUseHorPanel); 
+		energyUseVerTab.add(supplyInfoHorPanel);
+		
+		inputTabPanel.add(energyUseVerTab, "2. Energy Use");	
 		// TODO assemble other tabs
 
 		// assemble DisclosurePanel for notes
