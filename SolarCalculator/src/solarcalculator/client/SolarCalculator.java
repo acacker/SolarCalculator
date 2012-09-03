@@ -154,41 +154,41 @@ public class SolarCalculator implements EntryPoint {
 			// End Energy Use Horizontal
 		
 			// Average Rate Calculator
+				// Output Panel
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputLabel);
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputTextBox);
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputUnit);
 		supplyInfoResultPanel.add(supplyInforResultTitleLabel);
 		supplyInfoResultPanel.add(supplyInfoResultOutputPanel );
-		supplyInfoResultPanel.add(supplyInfoResultButton);
-		
+		supplyInfoResultPanel.add(supplyInfoResultButton);	
+				// Input Panel
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel1);
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel2);
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel3);
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel4);
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel5);
-
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel1);
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel2);
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel3);
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel4);
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel5);
-		
-		
 		supplyInfoInputPanel.add(supplyInfoInputTitle);
 		supplyInfoInputPanel.add(supplyInfoInputDescription);
 		supplyInfoInputPanel.add(supplyInfoInputFirstPanel);
 		supplyInfoInputPanel.add(supplyInfoInputSecondPanel);
 		supplyInfoInputPanel.add(supplyInfoInputButtion);
-		
+			// Average Rate Calculator
 		supplyInfoHorPanel.add(supplyInfoResultPanel);
 		supplyInfoHorPanel.add(supplyInfoInputPanel);
-		
+			// End Average Rate Calculator
+			// Use vertical panel
 		energyUseVerTab.add(EnergyUseTitle);
 		energyUseVerTab.add(EnergyUseDescription);
 		energyUseVerTab.add(energyUseHorPanel); 
 		energyUseVerTab.add(supplyInfoHorPanel);
 		
 		inputTabPanel.add(energyUseVerTab, "2. Energy Use");	
+		// End energy use tab
 		// TODO assemble other tabs
 
 		// assemble DisclosurePanel for notes
