@@ -22,10 +22,20 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+
+/**
+ * Presentation on Monday 4: 35 room O412
+ * 
+ * content : see black board. template on black board.
+ * 
+ * 
+ * Automata build tool. Maven or Hudson.
+ */
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class SolarCalculator implements EntryPoint {
+	
 
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private HorizontalPanel calculatePanel = new HorizontalPanel();
@@ -41,10 +51,15 @@ public class SolarCalculator implements EntryPoint {
 			+ indicativePrice + ", Annual output: " + annualOutput
 			+ "kW, Yearly Value: $" + yearlyValue + ", Payback Time: "
 			+ paybackTime + "Years");
+
 	//project tab ====================================================================
-	private HorizontalPanel projectTab = new HorizontalPanel();
+	private VerticalPanel projectTab = new VerticalPanel();
+	private Label projectTitleLabel = new Label("You can select one of the RenSMART Example " +
+			"projects to get you started from the drop down list below.");
+	private HorizontalPanel projectSelectionHorPanel = new HorizontalPanel();
+	private Label projectSelectionTitleLabel = new Label("Example Projects:");
 	private ListBox projectListBox = new ListBox();
-	private Button loadButton = new Button("Load");
+	private Button projectLoadButton = new Button("Load");
 	
 	//energy use tab ====================================================================
 	private VerticalPanel energyUseVerTab = new VerticalPanel();
@@ -83,7 +98,7 @@ public class SolarCalculator implements EntryPoint {
 	private HorizontalPanel supplyInfoHorPanel = new HorizontalPanel();
 			// Rate Result
 	private VerticalPanel supplyInfoResultPanel = new VerticalPanel();
-	private Label supplyInforResultTitleLabel = new Label();
+	private Label supplyInforResultTitleLabel = new Label("Supply Information");
 	private HorizontalPanel supplyInfoResultOutputPanel = new HorizontalPanel();
 	private Label supplyInfoResultOutputLabel = new Label("Import Tariff");
 	private TextBox supplyInfoResultOutputTextBox = new TextBox();
@@ -96,21 +111,26 @@ public class SolarCalculator implements EntryPoint {
 			" bill gives two prices for electricity. We will calculate an average price per ");
 	private HorizontalPanel supplyInfoInputFirstPanel = new HorizontalPanel();
 	private Label supplyInfoInputFirstLabel1 = new Label("First Rate");
-	private TextBox supplyInfoInputFirstLabel2 = new TextBox();
+	private TextBox supplyInfoInputFirstTextBox2 = new TextBox();
 	private Label supplyInfoInputFirstLabel3 = new Label("kWh	at ");
-	private TextBox supplyInfoInputFirstLabel4 = new TextBox();
+	private TextBox supplyInfoInputFirstTextBox4 = new TextBox();
 	private Label supplyInfoInputFirstLabel5 = new Label("p");
 	private HorizontalPanel supplyInfoInputSecondPanel = new HorizontalPanel();
-	private Label supplyInfoInputSecondLabel1 = new Label("First Rate");
-	private TextBox supplyInfoInputSecondLabel2 = new TextBox();
+	private Label supplyInfoInputSecondLabel1 = new Label("Second Rate");
+	private TextBox supplyInfoInputSecondTextBox2 = new TextBox();
 	private Label supplyInfoInputSecondLabel3 = new Label("kWh	at ");
-	private TextBox supplyInfoInputSecondLabel4 = new TextBox();
+	private TextBox supplyInfoInputSecondTextBox4 = new TextBox();
 	private Label supplyInfoInputSecondLabel5 = new Label("p");	
 	private Button supplyInfoInputButtion = new Button("Calculate Import Tariff");
 	
 	//Disclosure ====================================================================
-	private DisclosurePanel notesDisPanel=new DisclosurePanel("Click for notes");
-	private Label noteLabel=new Label("edit note here!");
+	private DisclosurePanel notesDisPanel=new DisclosurePanel("Click Here For Notes.");
+	private Label noteLabel=new Label("The entry fields above show the " +
+			"current project name and gives you a list of other projects you can select. You can " +
+			"change the project name at any time to create a new project." +
+			"Pressing the save button will store your project permanently with " +
+			"RenSMART. You will be able to load the project again when you revisit the " +
+			"site, and it will be listed on your RenSMART member home page");
 
 	private TabPanel inputTabPanel = new TabPanel();
 
@@ -121,13 +141,18 @@ public class SolarCalculator implements EntryPoint {
 		// assemble widgets in the calculate panel
 		calculatePanel.add(calculateButton);
 		calculatePanel.add(statusLabel);
-
+		
 		// assemble widgets in project tab of input tab panel
 		projectListBox.addItem("project 1", "1");
 		projectListBox.addItem("project 2", "2");
 		projectListBox.setVisibleItemCount(1);
-		projectTab.add(projectListBox);
-		projectTab.add(loadButton);
+		projectSelectionHorPanel.add(projectSelectionTitleLabel);
+		projectSelectionHorPanel.add(projectListBox);
+		projectSelectionHorPanel.add(projectLoadButton);
+		projectTab.add(projectTitleLabel);
+		projectTab.add(projectSelectionHorPanel);
+		
+		projectTitleLabel.addStyleName("TitleLabel");
 		inputTabPanel.add(projectTab, "1. Your Project");
 		inputTabPanel.selectTab(0);
 		
@@ -160,6 +185,11 @@ public class SolarCalculator implements EntryPoint {
 			// Energy Use
 		energyUseHorPanel.add(energyUseResultPanel);
 		energyUseHorPanel.add(energyUseCalcSubPanel);
+		// add style name
+		energyUseResultTitleLabel.addStyleName("TitleLabel");
+		energyUseCalcTitleSubLabel.addStyleName("TitleLabel");
+		energyUseResultPanel.addStyleName("EnergyUseHorRes");
+		energyUseCalcSubPanel.addStyleName("EnergyUseHor");
 			// End Energy Use 
 		
 			// Average Rate Calculator ------------------------------------------------
@@ -172,14 +202,14 @@ public class SolarCalculator implements EntryPoint {
 		supplyInfoResultPanel.add(supplyInfoResultButton);	
 				// Input Panel
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel1);
-		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel2);
+		supplyInfoInputFirstPanel.add(supplyInfoInputFirstTextBox2);
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel3);
-		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel4);
+		supplyInfoInputFirstPanel.add(supplyInfoInputFirstTextBox4);
 		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel5);
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel1);
-		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel2);
+		supplyInfoInputSecondPanel.add(supplyInfoInputSecondTextBox2);
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel3);
-		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel4);
+		supplyInfoInputSecondPanel.add(supplyInfoInputSecondTextBox4);
 		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel5);
 		supplyInfoInputPanel.add(supplyInfoInputTitle);
 		supplyInfoInputPanel.add(supplyInfoInputDescription);
@@ -189,6 +219,12 @@ public class SolarCalculator implements EntryPoint {
 			// Average Rate Calculator 
 		supplyInfoHorPanel.add(supplyInfoResultPanel);
 		supplyInfoHorPanel.add(supplyInfoInputPanel);
+		// add style name
+		supplyInforResultTitleLabel.addStyleName("TitleLabel");
+		supplyInfoInputTitle.addStyleName("TitleLabel");
+		supplyInfoResultPanel.addStyleName("EnergyUseHorRes");
+		supplyInfoInputPanel.addStyleName("EnergyUseHor");
+		
 			// End Average Rate Calculator
 			// Use vertical panel  ------------------------------------------------
 		energyUseVerTab.add(EnergyUseTitle);
@@ -196,9 +232,10 @@ public class SolarCalculator implements EntryPoint {
 		energyUseVerTab.add(energyUseHorPanel); 
 		energyUseVerTab.add(supplyInfoHorPanel);
 		
+		EnergyUseTitle.addStyleName("TitleLabel");
+		
 		inputTabPanel.add(energyUseVerTab, "2. Energy Use");	
 		// End energy use tab =============================================
-		// TODO assemble other tabs
 
 		// assemble DisclosurePanel for notes
 		notesDisPanel.add(noteLabel);
@@ -208,6 +245,8 @@ public class SolarCalculator implements EntryPoint {
 		mainPanel.add(resultsLabel);
 		mainPanel.add(inputTabPanel);
 		mainPanel.add(notesDisPanel);
+		mainPanel.addStyleName("main");
+		inputTabPanel.setWidth("1000px");
 
 		// associate the main panel with html host page
 		RootPanel.get("calculator").add(mainPanel);
