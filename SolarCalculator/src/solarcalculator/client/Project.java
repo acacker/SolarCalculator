@@ -75,6 +75,4 @@ public class Project {
 		}
 		return paybackTime;
 	}
-
-
 }
