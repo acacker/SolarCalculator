@@ -47,8 +47,12 @@ public class Project {
 	public Double getDailySolarGen() {
 		dailySolarGen = ((systemPower * efficiencyNorth * (1 - efficiencyLossNorth)) + (systemPower
 				* efficiencyWest * (1 - efficiencyLossWest)))
-				* panelEfficiency * inverterEfficiency * dailyHours * 365;
+				* panelEfficiency * inverterEfficiency * dailyHours;
 		return dailySolarGen;
+	}
+	
+	public Double getAnnualSolarGen(){
+		return this.getDailySolarGen()*365;
 	}
 
 	public Double getDailySave() {
