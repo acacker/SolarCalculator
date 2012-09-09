@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class SolarCalculator implements EntryPoint {
 
+	private Project project;
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private HorizontalPanel calculatePanel = new HorizontalPanel();
 	private Button calculateButton = new Button("Calculate");
@@ -142,10 +143,11 @@ public class SolarCalculator implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				Double indicativePrice = 0.0;
-				Double annualOutput = 0.0;
-				Double yearlyValue = 0.0;
-				Double paybackTime = 0.0;
+				project=new Project();
+				Double indicativePrice = project.getIndicativePrice();
+				Double annualOutput = project.getAnnualSolarGen();
+				Double yearlyValue = project.getAnnualSave();
+				Double paybackTime = project.getPaybackTime();
 				resultsLabel.setText("Indicative Price: $" + indicativePrice
 						+ ", Annual output: " + annualOutput
 						+ "kW, Yearly Value: $" + yearlyValue
