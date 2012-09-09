@@ -4,7 +4,7 @@
   <property name="gwt.args" value="" />
 
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0" />
+  <property name="gwt.sdk" location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
@@ -39,8 +39,8 @@
       <classpath>
         <pathelement location="src"/>
         <path refid="project.class.path"/>
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
+        <pathelement location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
@@ -57,8 +57,8 @@
       <classpath>
         <pathelement location="src"/>
         <path refid="project.class.path"/>
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/junit.jar" />
+        <pathelement location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <jvmarg value="-Xmx256M"/>
       <arg value="-startupUrl"/>
@@ -76,7 +76,7 @@
       source="1.5" target="1.5" nowarn="true"
       destdir="war/WEB-INF/classes"
       debug="true" debuglevel="lines,vars,source">
-      <classpath location="D:\eclipse\plugins\org.junit_3.8.2.v3_8_2_v20100427-1100\junit.jar"/>
+      <classpath location="/Applications/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/junit.jar"/>
       <classpath refid="project.class.path"/>
     </javac>
   </target>
@@ -91,9 +91,9 @@
         <pathelement location="src" />
         <pathelement location="test" />
         <path refid="project.class.path" />
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
-        <pathelement location="D:\eclipse\plugins\org.junit_3.8.2.v3_8_2_v20100427-1100\junit.jar" />
+        <pathelement location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
+        <pathelement location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/junit.jar" />
       </classpath>
       <batchtest todir="reports/htmlunit.dev" >
         <fileset dir="test" >
@@ -115,9 +115,9 @@
         <pathelement location="src" />
         <pathelement location="test" />
         <path refid="project.class.path" />
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
-        <pathelement location="D:/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
-        <pathelement location="D:\eclipse\plugins\org.junit_3.8.2.v3_8_2_v20100427-1100\junit.jar" />
+        <pathelement location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
+        <pathelement location="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080122-rel-r36/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/junit.jar" />
       </classpath>
       <batchtest todir="reports/htmlunit.prod" >
         <fileset dir="test" >
