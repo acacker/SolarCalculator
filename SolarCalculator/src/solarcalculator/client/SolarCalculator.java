@@ -62,6 +62,7 @@ public class SolarCalculator implements EntryPoint {
 					+ "to estimate how much renewable energy will be imported and exported from your chosen "
 					+ "renewable energy source.");
 	// Energy Use
+	private UseEnergy energyUseCalcu = new UseEnergy();
 	// -------------------------------------------------------------------
 	private HorizontalPanel energyUseHorPanel = new HorizontalPanel();
 	// Result
@@ -176,7 +177,7 @@ public class SolarCalculator implements EntryPoint {
 		// Result panel
 		energyUseProfileListBox.addItem("Domestic Home", "1");
 		energyUseProfileListBox.addItem("Comercial Office", "2");
-
+		
 		energyUseProfileHorPanel.add(energyUseProfileLabel);
 		energyUseProfileHorPanel.add(energyUseProfileListBox);
 		energyUseYearTotalPanel.add(energyUseYearTotalLabel);
@@ -189,6 +190,8 @@ public class SolarCalculator implements EntryPoint {
 		energyUseCalcInputListBox.addItem("Daily Energy Use", "1");
 		energyUseCalcInputListBox.addItem("Monthly Energy Use", "2");
 		energyUseCalcInputListBox.addItem("Quarterly Energy Use", "3");
+		
+		energyUseCalcInputListBox.getSelectedIndex();
 
 		energyUseCalcInputPanel.add(energyUseCalcInputListBox);
 		energyUseCalcInputPanel.add(energyUseCalcInputTextBox);
@@ -197,6 +200,20 @@ public class SolarCalculator implements EntryPoint {
 		energyUseCalcSubPanel.add(energyUseCalcDecripLabel);
 		energyUseCalcSubPanel.add(energyUseCalcInputPanel);
 		energyUseCalcSubPanel.add(energyUseCalcButtion);
+		
+		energyUseCalcButtion.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				final String userInput;
+				userInput = energyUseCalcInputTextBox.getText();
+				energyUseCalcu.setEnergyUse(userInput);
+				energyUseCalcu.setYearlyEnergyUse(energyUseCalcInputListBox.getSelectedIndex());
+				energyUseYearTotalBox.setText(energyUseCalcu.getYearlyEnergyUse().toString());
+			}
+		});
+		
 		// Energy Use
 		energyUseHorPanel.add(energyUseResultPanel);
 		energyUseHorPanel.add(energyUseCalcSubPanel);
