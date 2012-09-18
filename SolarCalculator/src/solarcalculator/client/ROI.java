@@ -29,13 +29,6 @@ public class ROI {
 		importTariff = useEnergy.getAvgRate();
 		exportTariff = project.getFeedInFee();
 		SolarFitTariff = project.getTariffFee();
-		importCost = 0.0;
-		exportValue = 0.0;
-		usedValue = 0.0;
-		SolarFitValue = 0.0;
-		YearTotal = 0.0;
-		AcumTotal = 0.0;
-		RateOI = 0.0;
 	}
 	
 	/**
@@ -81,12 +74,6 @@ public class ROI {
 		return SolarFitTariff;
 	}
 	/**
-	 * @param solarFitTariff the solarFitTariff to set
-	 */
-	public void setSolarFitTariff(int colum) {
-		SolarFitTariff = SolarFitTariff*(1+Math.pow(increaseRate, colum));
-	}
-	/**
 	 * @return the importCost
 	 */
 	public Double getImportCost() {
@@ -96,7 +83,7 @@ public class ROI {
 	 * @param importCost the importCost to set
 	 */
 	public void setImportCost(Double importCost) {
-		this.importCost = importCost;
+		this.importCost = (useEnergy.getYearlyEnergyUse() - project.getDateTimeUsage()) * importTariff;
 	}
 	/**
 	 * @return the exportValue
@@ -108,7 +95,7 @@ public class ROI {
 	 * @param exportValue the exportValue to set
 	 */
 	public void setExportValue(Double exportValue) {
-		this.exportValue = exportValue;
+		this.exportValue = (project.getAnnualSolarGen() - project.getDateTimeUsage()) * exportTariff;
 	}
 	/**
 	 * @return the usedValue
@@ -120,7 +107,7 @@ public class ROI {
 	 * @param usedValue the usedValue to set
 	 */
 	public void setUsedValue(Double usedValue) {
-		this.usedValue = usedValue;
+		this.usedValue = project.getDateTimeUsage() * importTariff;
 	}
 	/**
 	 * @return the solarFitValue
@@ -132,7 +119,7 @@ public class ROI {
 	 * @param solarFitValue the solarFitValue to set
 	 */
 	public void setSolarFitValue(Double solarFitValue) {
-		SolarFitValue = solarFitValue;
+		SolarFitValue = project.getAnnualSolarGen() * SolarFitTariff;
 	}
 	/**
 	 * @return the yearTotal
@@ -144,7 +131,7 @@ public class ROI {
 	 * @param yearTotal the yearTotal to set
 	 */
 	public void setYearTotal(Double yearTotal) {
-		YearTotal = yearTotal;
+	
 	}
 	/**
 	 * @return the acumTotal

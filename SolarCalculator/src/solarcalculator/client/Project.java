@@ -19,6 +19,8 @@ public class Project {
 	private Double PanelAgeEffLoss = 0.01;
 	private Double inverterEfficiency = 0.96;
 	private Double dailyHours = 4.5;
+	private Double dayTimeUsage;
+	private Double dayTimeRate = 4.5/24;
 	private Double tariffFee = 0.19;// increasing annually
 	private Double annualTariffInc = 0.05;
 	private Double feedInFee = 0.50;
@@ -29,6 +31,8 @@ public class Project {
 	private Double replacementGen = 4.5;
 	private Double exportGen;
 	private Double compountInvRate=0.05;
+	
+	private UseEnergy useEnergy;
 
 	public Project() {
 	}
@@ -55,6 +59,16 @@ public class Project {
 	
 	public Double getAnnualSolarGen(){
 		return this.getDailySolarGen()*365;
+	}
+	
+	
+
+	public Double getDateTimeUsage() {
+		return dayTimeUsage;
+	}
+
+	public void setDateTimeUsage() {
+		this.dayTimeUsage = useEnergy.getYearlyEnergyUse() * dayTimeRate;
 	}
 
 	public Double getDailySave() {
