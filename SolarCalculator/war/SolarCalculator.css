@@ -2,39 +2,99 @@
 
 
 /** Example rules used by the template application (remove for your app) */
-body{
-}
-.gwt-TextBox{
-	height: 10px;
-	padding: 3px 5px;
+.body{
+	background-color: #fffff;
 }
 
+.banner{
+	background-image: url("resources/images/banner2.png");
+	background-repeat: no-repeat;
+	padding: 10px;
+	font-weight: bolder;
+	font-size: 50pt;
+}
+.gwt-TabPanel{
+	background-color: #1C7887;
+}
+.gwt-TabBar{
+	background-color: #E1E9DC;
+}
+
+.gwt-TabBottom{
+	background-color: #1C7887;
+	height: 600px;
+}
+
+.gwt-TabBarItem {
+  height: 20px;
+  cursor: pointer;
+  background-color: #fff;
+  margin-right: 2px;
+}
+
+.gwt-TabBarItem-selected {
+  padding: 4px;
+  background-color: #000000;
+  margin-right: 2px;
+}
+
+.gwt-TabBar {
+  padding-top: 2px;
+  border-bottom: 4px solid #878787;
+  background-color: #fff;
+}
+.gwt-Label{
+	height: 20px;
+	width: 120px;
+	color: #E1E9DC;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	font-size: 11pt;
+}
+
+.TitleLabel{
+	font-weight: bold;
+	height: 20px;
+	width: auto;
+	color: #D6C84B;
+	font-size: 12pt;
+	margin-left: 10px;
+	margin-bottom:10px;
+}
+
+.Description{
+	color:#E1E9DC;
+	font-size: 11pt;
+	width: auto;
+	margin-left:30px;
+	margin-bottom: 50px;
+}
+
+.gwt-TextBox{
+	height: 10px;
+	width:80px;
+	padding: 3px 5px;
+	margin-left: 10px;
+}
+
+.unitLabel{
+	width:auto;
+}
+
+.gwt-ListBox{
+	margin-left: 10px;
+}
 .gwt-Button{
 	width: 80px;
-	height: 30px;
+	height: 25px;
 	border: 1px outset #CCCCCC;
 	font-size:small;
-	padding: 3px 5px;
-	margin: 3px 5px;
+	margin-left: 30px;
 }
 
 .main{
 	width:1000px;
 	margin: 0 auto;
-}
-
-.banner{
-	height: 150 px;
-	background-color: gray;
-	color: maroon;  
-}
-
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
 }
 
 .EnergyUseHorRes{
@@ -45,7 +105,8 @@ h1 {
 	border: thin;
 	border-style: solid;
 	text-align: center;
-	background-color: aqua;
+	border-color: #E1E9DC;
+	background-color: #26BCD5;
 }
 
 .EnergyUseHor{
@@ -55,17 +116,19 @@ h1 {
 	margin: 10px;
 	border: thin;
 	border-style: solid;
+	border-color: #E1E9DC;
 	text-align: center;
 }
 
-
-
-.TitleLabel{
-	font-weight: bold;
-	height: 20px;
-	color: blue;
-	font-size: 12pt;
-	margin: 10px;
+.ROITableHeader{
+	background-color: #000000;
+	color: #D6C84B;
+	text-align: center;
 }
+.ROITable{
+	
+}
+
+
 
 

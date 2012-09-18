@@ -5,6 +5,8 @@ package solarcalculator.client;
  * 
  * @author Lance
  * 
+ * limited 2 number after dot
+ * 
  */
 public class Project {
 
@@ -75,4 +77,22 @@ public class Project {
 		}
 		return paybackTime;
 	}
+
+	public Double getTariffFee() {
+		return tariffFee;
+	}
+
+	public void setTariffFee(Double tariffFee) {
+		this.tariffFee = tariffFee;
+	}
+
+	public Double getFeedInFee() {
+		return feedInFee;
+	}
+
+	public void setFeedInFee(Double feedInFee) {
+		this.feedInFee = feedInFee;
+	}
+	
+	
 }
