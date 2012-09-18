@@ -1,5 +1,9 @@
 package solarcalculator.client;
 
+import java.text.DecimalFormat;
+
+import com.google.gwt.i18n.client.NumberFormat;
+
 /**
  * project includes all data relevant for calculation
  * 
@@ -35,6 +39,11 @@ public class Project {
 	private UseEnergy useEnergy;
 
 	public Project() {
+	}
+	
+	public Project(Double power, Double price){
+		systemPower=power;
+		indicativePrice=price;
 	}
 
 	public Double getExportGen() {
@@ -107,6 +116,9 @@ public class Project {
 	public void setFeedInFee(Double feedInFee) {
 		this.feedInFee = feedInFee;
 	}
-	
-	
+
+	public String parseNumberFormat(Double value){
+		NumberFormat fmt=NumberFormat.getFormat("#.00");
+		return fmt.format(value);
+	}
 }

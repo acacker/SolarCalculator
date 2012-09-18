@@ -47,11 +47,4 @@
 		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
 		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>doc/Release 1 overview.docx</name>
-			<type>1</type>
-			<location>/Users/acacker/Documents/Release 1 overview.docx</location>
-		</link>
-	</linkedResources>
 </projectDescription>

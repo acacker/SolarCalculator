@@ -1,8 +1,11 @@
 package solarcalculator.client;
 
+import java.text.DecimalFormat;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,9 +37,8 @@ import com.google.gwt.user.client.ui.FlexTable;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
+
 public class SolarCalculator implements EntryPoint {
-	private Label unit = new Label();
-	
 	
 	private Project project;
 	private VerticalPanel mainPanel = new VerticalPanel();
@@ -78,16 +80,16 @@ public class SolarCalculator implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				project=new Project();
-				Double indicativePrice = project.getIndicativePrice();
-				Double annualOutput = project.getAnnualSolarGen();
-				Double yearlyValue = project.getAnnualSave();
-				Double paybackTime = project.getPaybackTime();
+				project=new Project(5.1, 12000.00);
+				String indicativePrice =  project.parseNumberFormat(project.getIndicativePrice());
+				String annualOutput = project.parseNumberFormat(project.getAnnualSolarGen());
+				String yearlyValue = project.parseNumberFormat(project.getAnnualSave());
+				String paybackTime = project.parseNumberFormat(project.getPaybackTime());
 				
-				projectPriceTextBox.setText(indicativePrice.toString());
-				projectAnuOutTextBox.setText(annualOutput.toString());
-				projectYearVTextBox.setText(yearlyValue.toString());
-				projectPBTextBox.setText(paybackTime.toString());
+				projectPriceTextBox.setText(indicativePrice);
+				projectAnuOutTextBox.setText(annualOutput);
+				projectYearVTextBox.setText(yearlyValue);
+				projectPBTextBox.setText(paybackTime);
 			}
 		});
 		
