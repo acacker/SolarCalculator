@@ -11,13 +11,16 @@ import com.google.gwt.user.client.ui.TextBox;
 
 public class UseEnergy {
 	private Double EnergyUse;
-	private Double YearlyEnergyUse;
+	private Double YearlyEnergyUse = 0.0;
 	private Double AvgRate;
 	private Double price1;
 	private Double price2;
 	private Double rate1;
 	private Double rate2;
 	
+	public UseEnergy(){
+		
+	}
 	// show yearly energy use Result
 	public Double getYearlyEnergyUse() {
 		return YearlyEnergyUse;

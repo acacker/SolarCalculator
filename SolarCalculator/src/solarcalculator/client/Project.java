@@ -13,8 +13,9 @@ import com.google.gwt.i18n.client.NumberFormat;
  * 
  */
 public class Project {
-
-	private Double systemPower = 4.95; // kW
+	
+	private Integer year = 0;
+	private Double systemPower = 4.5; // kW
 	private Double efficiencyNorth = 0.38;
 	private Double efficiencyWest = 0.62;
 	private Double efficiencyLossNorth = 0.05;
@@ -26,15 +27,17 @@ public class Project {
 	private Double dayTimeUsage;
 	private Double dayTimeRate = 4.5/24;
 	private Double tariffFee = 0.19;// increasing annually
-	private Double annualTariffInc = 0.05;
+	private Double annualTariffInc = 0.005;
 	private Double feedInFee = 0.50;
-	private Double indicativePrice = 18000.00;
+	private Double indicativePrice = 10000.00;
 	private Double dailySolarGen;
 	private Double dailySave;
 	private Double paybackTime;
 	private Double replacementGen = 4.5;
 	private Double exportGen;
 	private Double compountInvRate=0.05;
+	
+	private Double importCost = 0.0;
 	
 	private UseEnergy useEnergy;
 
@@ -44,6 +47,84 @@ public class Project {
 	public Project(Double power, Double price){
 		systemPower=power;
 		indicativePrice=price;
+	}
+	
+
+	/**
+	 * @return the systemPower
+	 */
+	public Double getSystemPower() {
+		return systemPower;
+	}
+
+	/**
+	 * @param systemPower the systemPower to set
+	 */
+	public void setSystemPower(Double systemPower) {
+		this.systemPower = systemPower;
+	}
+
+	/**
+	 * @return the efficiencyNorth
+	 */
+	public Double getEfficiencyNorth() {
+		return efficiencyNorth;
+	}
+
+	/**
+	 * @param efficiencyNorth the efficiencyNorth to set
+	 */
+	public void setEfficiencyNorth(Double efficiencyNorth) {
+		this.efficiencyNorth = efficiencyNorth;
+	}
+
+	/**
+	 * @return the efficiencyWest
+	 */
+	public Double getEfficiencyWest() {
+		return efficiencyWest;
+	}
+
+	/**
+	 * @param efficiencyWest the efficiencyWest to set
+	 */
+	public void setEfficiencyWest(Double efficiencyWest) {
+		this.efficiencyWest = efficiencyWest;
+	}
+
+	/**
+	 * @return the dailyHours
+	 */
+	public Double getDailyHours() {
+		return dailyHours;
+	}
+
+	/**
+	 * @param dailyHours the dailyHours to set
+	 */
+	public void setDailyHours(Double dailyHours) {
+		this.dailyHours = dailyHours;
+	}
+
+	/**
+	 * @return the compountInvRate
+	 */
+	public Double getCompountInvRate() {
+		return compountInvRate;
+	}
+
+	/**
+	 * @param compountInvRate the compountInvRate to set
+	 */
+	public void setCompountInvRate(Double compountInvRate) {
+		this.compountInvRate = compountInvRate;
+	}
+
+	/**
+	 * @param indicativePrice the indicativePrice to set
+	 */
+	public void setIndicativePrice(Double indicativePrice) {
+		this.indicativePrice = indicativePrice;
 	}
 
 	public Double getExportGen() {
@@ -60,9 +141,8 @@ public class Project {
 	}
 
 	public Double getDailySolarGen() {
-		dailySolarGen = ((systemPower * efficiencyNorth * (1 - efficiencyLossNorth)) + (systemPower
-				* efficiencyWest * (1 - efficiencyLossWest)))
-				* panelEfficiency * inverterEfficiency * dailyHours;
+		dailySolarGen = (systemPower * (efficiencyNorth *(1-efficiencyLossNorth) + efficiencyWest *(1- efficiencyLossWest)))* 
+				panelEfficiency*Math.pow((1-PanelAgeEffLoss), year) * inverterEfficiency * dailyHours;
 		return dailySolarGen;
 	}
 	
@@ -105,8 +185,8 @@ public class Project {
 		return tariffFee;
 	}
 
-	public void setTariffFee(Double tariffFee) {
-		this.tariffFee = tariffFee;
+	public void setTariffFee() {
+		this.tariffFee = tariffFee*Math.pow((1 + annualTariffInc) , year);
 	}
 
 	public Double getFeedInFee() {
@@ -118,7 +198,39 @@ public class Project {
 	}
 
 	public String parseNumberFormat(Double value){
-		NumberFormat fmt=NumberFormat.getFormat("#.00");
+		NumberFormat fmt=NumberFormat.getFormat("#0.00");
 		return fmt.format(value);
 	}
+
+	/**
+	 * @return the year
+	 */
+	public Integer getYear() {
+		return year;
+	}
+
+	/**
+	 * @param year the year to set
+	 */
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	/**
+	 * @return the importCost
+	 */
+	public Double getImportCost() {
+		return importCost;
+	}
+
+	
+	public Double getUsedValue(){
+		return replacementGen * tariffFee;
+	}
+	
+	
+	public Double getExportValue(){
+		return exportGen * feedInFee;
+	}
+	
 }

@@ -3,6 +3,8 @@ package solarcalculator.client;
 import java.text.DecimalFormat;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -57,6 +59,18 @@ public class SolarCalculator implements EntryPoint {
 	private Label projectTitleLabel = new Label(
 			"You can select one of the RenSMART Example "
 					+ "projects to get you started from the drop down list below.");
+	private Label SystemPower = new Label("System Power:");
+	private TextBox SystemPowerTB = new TextBox();
+	private Label DailyHr = new Label("Daily Hour:");
+	private TextBox DailyHrTB = new TextBox();
+//	private Label asd = new Label();
+//	private TextBox asdd = new TextBox();
+//	private Label asd = new Label();
+//	private TextBox asdd = new TextBox();
+//	private Label asd = new Label();
+//	private TextBox asdd = new TextBox();
+//	private Label asd = new Label();
+//	private TextBox asdd = new TextBox();
 	private HorizontalPanel projectSelectionHorPanel = new HorizontalPanel();
 	private Label projectSelectionTitleLabel = new Label("Example Projects:");
 	private ListBox projectSelectionListBox = new ListBox();
@@ -75,12 +89,32 @@ public class SolarCalculator implements EntryPoint {
 	private TextBox projectPBTextBox = new TextBox();
 	
 	public void BuildProjectTab(){
+		
+		projectSelectionListBox.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				// TODO Auto-generated method stub
+				if(projectSelectionListBox.getSelectedIndex()==1){
+					project=new Project();
+				}
+				else if(projectSelectionListBox.getSelectedIndex()==2){
+					project=new Project(5.1, 18000.00);
+				}
+				
+				SystemPowerTB.setText(project.getSystemPower().toString());
+				DailyHrTB.setText(project.getDailyHours().toString());
+			}
+		});
 		// assemble widgets in the calculate panel
 		calculateButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				project=new Project(5.1, 12000.00);
+				
+				project.setSystemPower(Double.parseDouble(SystemPowerTB.getText()));
+				project.setDailyHours(Double.parseDouble(DailyHrTB.getText()));
+				
 				String indicativePrice =  project.parseNumberFormat(project.getIndicativePrice());
 				String annualOutput = project.parseNumberFormat(project.getAnnualSolarGen());
 				String yearlyValue = project.parseNumberFormat(project.getAnnualSave());
@@ -90,14 +124,17 @@ public class SolarCalculator implements EntryPoint {
 				projectAnuOutTextBox.setText(annualOutput);
 				projectYearVTextBox.setText(yearlyValue);
 				projectPBTextBox.setText(paybackTime);
+				
+				buildROITable();
 			}
 		});
 		
 		
 		// assemble widgets in project tab of input tab panel
-		projectSelectionListBox.addItem("project 1", "1");
-		projectSelectionListBox.addItem("project 2", "2");
-		projectSelectionListBox.setVisibleItemCount(1);
+		projectSelectionListBox.addItem("Please select your system model", "0");
+		projectSelectionListBox.addItem("Solar System Model-4.5kW", "1");
+		projectSelectionListBox.addItem("Solar System Model-5.1kW", "2");
+		projectSelectionListBox.setVisibleItemCount(0);
 		
 		projectSelectionHorPanel.add(projectSelectionTitleLabel);
 		projectSelectionHorPanel.add(projectSelectionListBox);
@@ -117,6 +154,10 @@ public class SolarCalculator implements EntryPoint {
 		
 		projectVerTab.add(projectTitleLabel);
 		projectVerTab.add(projectSelectionHorPanel);
+		projectVerTab.add(SystemPower);
+		projectVerTab.add(SystemPowerTB);
+		projectVerTab.add(DailyHr);
+		projectVerTab.add(DailyHrTB);
 		projectVerTab.add(projectPriceHorPanel);
 		projectVerTab.add(projectAnuOutHorPanel);
 		projectVerTab.add(projectYearVHorPanel);
@@ -358,16 +399,15 @@ public class SolarCalculator implements EntryPoint {
 		ROITable.setText(0, 0, "Year");
 		ROITable.setText(0, 1, "Import Tariff");
 		ROITable.setText(0, 2, "Export Tariff");
-		ROITable.setText(0, 3, "Solar FIT Tariff");
-		ROITable.setText(0, 4, "Import Cost");
-		ROITable.setText(0, 5, "Export Value");
-		ROITable.setText(0, 6, "Used Value");
-		ROITable.setText(0, 7, "Solar FIT Value");
-		ROITable.setText(0, 8, "Year Total");
-		ROITable.setText(0, 9, "Accumulated Total");
-		ROITable.setText(0, 10, "ROI");
+		ROITable.setText(0, 3, "Export Value");
+		ROITable.setText(0, 4, "Used Value");
+		ROITable.setText(0, 5, "Annual Generate");
+		ROITable.setText(0, 6, "Year Total");
+		ROITable.setText(0, 7, "Accumulated Total");
+		ROITable.setText(0, 8, "ROI");
 		ROITable.getRowFormatter().addStyleName(0, "ROITableHeader");
 		ROITable.setStyleName("ROITable");
+		ROITable.setWidth("900px");
 		
 		ROINote.add(ROINoteHTML);
 		ROITabVerPanel.add(ROITitleLabel);
@@ -378,6 +418,29 @@ public class SolarCalculator implements EntryPoint {
 		ROITabVerPanel.add(ROINote);
 	}
 
+	public void buildROITable(){
+		Double cumSaving = 0.0;
+		Double ROI = 0.0;
+		for(int i = 1; i < 15; i++){
+			
+			project.setYear(i);
+			project.setTariffFee();
+			project.getAnnualSave();
+			cumSaving = cumSaving + project.getAnnualSave();
+			ROI = (cumSaving/project.getIndicativePrice()- 1)*100;
+			project.parseNumberFormat(project.getTariffFee());
+			
+			ROITable.setText(i, 0, project.getYear().toString());
+			ROITable.setText(i, 1, project.parseNumberFormat(project.getTariffFee()));
+			ROITable.setText(i, 2, project.parseNumberFormat(project.getFeedInFee()));
+			ROITable.setText(i, 3, project.parseNumberFormat(project.getExportValue()));
+			ROITable.setText(i, 4, project.parseNumberFormat(project.getUsedValue()));
+			ROITable.setText(i, 5, project.parseNumberFormat(project.getAnnualSolarGen()));
+			ROITable.setText(i, 6, project.parseNumberFormat(project.getAnnualSave()));
+			ROITable.setText(i, 7, project.parseNumberFormat(cumSaving));
+			ROITable.setText(i, 8, project.parseNumberFormat(ROI)+ "%");
+		}
+	}
 	// Disclosure
 	// ====================================================================
 	private DisclosurePanel notesDisPanel = new DisclosurePanel(
