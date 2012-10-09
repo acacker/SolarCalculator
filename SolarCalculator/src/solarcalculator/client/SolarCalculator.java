@@ -7,6 +7,10 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -20,6 +24,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Presentation on Monday 4: 35 room O412
@@ -41,9 +46,10 @@ import com.google.gwt.user.client.ui.FlexTable;
  */
 
 public class SolarCalculator implements EntryPoint {
-	
 	private Project project;
+	private UseEnergy usedEnergy;
 	private VerticalPanel mainPanel = new VerticalPanel();
+	private HorizontalPanel bodyPanel = new HorizontalPanel();
 	// Banner 
 	// ====================================================================
 	private HorizontalPanel Banner = new HorizontalPanel();
@@ -52,41 +58,112 @@ public class SolarCalculator implements EntryPoint {
 		Banner.setSize("1000px", "100px");
 		Banner.setStyleName("banner");
 	}
+	// Output Panel
+	// ====================================================================
+	private VerticalPanel outputPanel = new VerticalPanel();
+	private Label outputPorjectName = new Label("Current Project:");
+	private TextBox outputNameTextBox = new TextBox();
+	private HorizontalPanel outputPriceHorPanel = new HorizontalPanel();
+	private Label outputPriceTitle = new Label("Indicative Price: $");
+	private TextBox outputPriceTextBox = new TextBox();
+	private HorizontalPanel outputAnuOutHorPanel = new HorizontalPanel();
+	private Label outputAnuOutTitle = new Label("Annual output:");
+	private TextBox outputAnuOutTextBox = new TextBox();
+	private HorizontalPanel outputYearVHorPanel = new HorizontalPanel();
+	private Label outputYearVTitle = new Label("Yearly Value: ");
+	private TextBox outputYearVTextBox = new TextBox();
+	private HorizontalPanel outputPBHorPanel = new HorizontalPanel();
+	private Label outputPBTitle = new Label("Payback Time: ");
+	private TextBox outputPBTextBox = new TextBox();
+	private Button calculateButton = new Button("Calculate");
+	
+	public void buildOutputPanel(){
+		// assemble widgets in the calculate panel
+		calculateButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				int selected = projectSelectionListBox.getSelectedIndex();
+				switch(selected){
+				case 1:
+					project=new Project(4.5, 10000.00);
+				break;
+				case 2:
+					project=new Project(5.1, 18000.00);
+				break;
+				case 3:
+					project = new Project();
+					project.setSystemPower(Double.parseDouble(SystemPowerTB.getText()));
+					project.setIndicativePrice(Double.parseDouble(outputPriceTextBox.getText()));
+					project.setIndexTariff(Double.parseDouble(supplyInfoResultOutputTextBox.getText()));
+					project.setDayTimeUsage(Double.parseDouble(energyUseYearTotalBox.getText()));
+				}
+				
+				String indicativePrice =  project.parseNumberFormat(project.getIndicativePrice());
+				String annualOutput = project.parseNumberFormat(project.getAnnualSolarGen());
+				String yearlyValue = project.parseNumberFormat(project.getAnnualSave());
+				String paybackTime = project.parseNumberFormat(project.getPaybackTime());
+				
+				outputPriceTextBox.setText(indicativePrice);
+				outputAnuOutTextBox.setText(annualOutput);
+				outputYearVTextBox.setText(yearlyValue);
+				outputPBTextBox.setText(paybackTime);
+				
+				buildROITable();
+			}
+		});
+		outputPriceHorPanel.add(outputPriceTitle);
+		outputPriceHorPanel.add(outputPriceTextBox);
+		
+		outputAnuOutHorPanel.add(outputAnuOutTitle);
+		outputAnuOutHorPanel.add(outputAnuOutTextBox);
+		
+		outputYearVHorPanel.add(outputYearVTitle);
+		outputYearVHorPanel.add(outputYearVTextBox);
+		
+		outputPBHorPanel.add(outputPBTitle);
+		outputPBHorPanel.add(outputPBTextBox);
+		
+		outputPanel.add(outputPorjectName);
+		outputPanel.add(outputNameTextBox);
+		outputPanel.add(outputPriceHorPanel);
+		outputPanel.add(outputAnuOutHorPanel);
+		outputPanel.add(outputYearVHorPanel);
+		outputPanel.add(outputPBHorPanel);
+		outputPanel.add(calculateButton);
+		outputNameTextBox.setWidth("200px");
+		outputPanel.addStyleName("outputPanel");
+		outputPorjectName.addStyleName("TitleLabel");
+	}
+	
 	// project tab
 	// ====================================================================
 	private VerticalPanel projectVerTab = new VerticalPanel();
-
-	private Label projectTitleLabel = new Label(
-			"You can select one of the RenSMART Example "
-					+ "projects to get you started from the drop down list below.");
+	private Label projectTitleLabel = new Label("Select Project");
+	private HorizontalPanel projectSelectionHorPanel = new HorizontalPanel();
+	private Label projectSelectionTitleLabel = new Label("Example Projects:");
+	private ListBox projectSelectionListBox = new ListBox();
+	private HorizontalPanel projectLocatonHorPanel = new HorizontalPanel();
+	private Label projectLocationTitleLabel = new Label("Location:");
+	private ListBox projectLocationListBox = new ListBox();
 	private Label SystemPower = new Label("System Power:");
 	private TextBox SystemPowerTB = new TextBox();
 	private Label DailyHr = new Label("Daily Hour:");
 	private TextBox DailyHrTB = new TextBox();
-//	private Label asd = new Label();
-//	private TextBox asdd = new TextBox();
-//	private Label asd = new Label();
-//	private TextBox asdd = new TextBox();
-//	private Label asd = new Label();
-//	private TextBox asdd = new TextBox();
-//	private Label asd = new Label();
-//	private TextBox asdd = new TextBox();
-	private HorizontalPanel projectSelectionHorPanel = new HorizontalPanel();
-	private Label projectSelectionTitleLabel = new Label("Example Projects:");
-	private ListBox projectSelectionListBox = new ListBox();
-	private Button calculateButton = new Button("Calculate");
-	private HorizontalPanel projectPriceHorPanel = new HorizontalPanel();
-	private Label projectPriceTitle = new Label("Indicative Price: $");
-	private TextBox projectPriceTextBox = new TextBox();
-	private HorizontalPanel projectAnuOutHorPanel = new HorizontalPanel();
-	private Label projectAnuOutTitle = new Label("Annual output:");
-	private TextBox projectAnuOutTextBox = new TextBox();
-	private HorizontalPanel projectYearVHorPanel = new HorizontalPanel();
-	private Label projectYearVTitle = new Label("Yearly Value: ");
-	private TextBox projectYearVTextBox = new TextBox();
-	private HorizontalPanel projectPBHorPanel = new HorizontalPanel();
-	private Label projectPBTitle = new Label("Payback Time: ");
-	private TextBox projectPBTextBox = new TextBox();
+
+
+
+	private DisclosurePanel projectNotesDisPanel = new DisclosurePanel(
+			"Click Here For Notes.");
+	private HTML projectNoteLabel = new HTML(
+			"The entry fields above show the "+ 
+			"current project name and gives you a list of other projects you can select. You can "+
+			"change the project name at any time to create a new project." + 
+			"Pressing the save button will store your project permanently with " +
+			"RenSMART. You will be able to load the project again when you revisit the " +
+			"site, and it will be listed on your RenSMART member home page");
+
+	private TabPanel inputTabPanel = new TabPanel();
 	
 	public void BuildProjectTab(){
 		
@@ -95,74 +172,100 @@ public class SolarCalculator implements EntryPoint {
 			@Override
 			public void onChange(ChangeEvent event) {
 				// TODO Auto-generated method stub
-				if(projectSelectionListBox.getSelectedIndex()==1){
-					project=new Project();
-				}
-				else if(projectSelectionListBox.getSelectedIndex()==2){
+				int selected = projectSelectionListBox.getSelectedIndex();
+				switch(selected){
+				case 1:
+					project=new Project(4.5, 10000.00);
+				break;
+				case 2:
 					project=new Project(5.1, 18000.00);
+				break;
+				case 3:
+					project = new Project(0.0,0.0);
+				break;
+				}
+				SystemPowerTB.setText(project.getSystemPower().toString());
+				outputNameTextBox.setText(projectSelectionListBox.getItemText(selected));
+				outputAnuOutTextBox.setText("0.0");
+				outputPBTextBox.setText("0.0");
+				outputPriceTextBox.setText("0.0");
+				outputYearVTextBox.setText("0.0");
+			}
+		});
+
+		projectLocationListBox.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				// TODO Auto-generated method stub
+				switch(projectLocationListBox.getSelectedIndex()){
+				case 0:
+					project.setDailyHours(5.0);
+					break;
+				case 1:
+					project.setDailyHours(6.0);
+					break;
+				case 2:
+					project.setDailyHours(9.0);
+					break;
+				case 3:
+					project.setDailyHours(4.0);
+					break;
+				case 4:
+					project.setDailyHours(6.5);
+					break;
+				case 5:
+					project.setDailyHours(5.5);
+					break;
+				case 6:
+					project.setDailyHours(3.0);
+					break;
+				case 7:
+					project.setDailyHours(6.0);
+					break;
 				}
 				
-				SystemPowerTB.setText(project.getSystemPower().toString());
 				DailyHrTB.setText(project.getDailyHours().toString());
 			}
 		});
-		// assemble widgets in the calculate panel
-		calculateButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				
-				project.setSystemPower(Double.parseDouble(SystemPowerTB.getText()));
-				project.setDailyHours(Double.parseDouble(DailyHrTB.getText()));
-				
-				String indicativePrice =  project.parseNumberFormat(project.getIndicativePrice());
-				String annualOutput = project.parseNumberFormat(project.getAnnualSolarGen());
-				String yearlyValue = project.parseNumberFormat(project.getAnnualSave());
-				String paybackTime = project.parseNumberFormat(project.getPaybackTime());
-				
-				projectPriceTextBox.setText(indicativePrice);
-				projectAnuOutTextBox.setText(annualOutput);
-				projectYearVTextBox.setText(yearlyValue);
-				projectPBTextBox.setText(paybackTime);
-				
-				buildROITable();
-			}
-		});
 		
+		
+		// assemble DisclosurePanel for notes
+		projectNotesDisPanel.add(projectNoteLabel);
 		
 		// assemble widgets in project tab of input tab panel
 		projectSelectionListBox.addItem("Please select your system model", "0");
 		projectSelectionListBox.addItem("Solar System Model-4.5kW", "1");
 		projectSelectionListBox.addItem("Solar System Model-5.1kW", "2");
+		projectSelectionListBox.addItem("Customize");
 		projectSelectionListBox.setVisibleItemCount(0);
+		
+		projectLocationListBox.addItem("NSW","0");
+		projectLocationListBox.addItem("ACT","1");
+		projectLocationListBox.addItem("NT","2");
+		projectLocationListBox.addItem("QLD","3");
+		projectLocationListBox.addItem("SA","4");
+		projectLocationListBox.addItem("TAS","5");
+		projectLocationListBox.addItem("VIC","6");
+		projectLocationListBox.addItem("WA","7");
+		projectLocationListBox.setVisibleItemCount(0);
 		
 		projectSelectionHorPanel.add(projectSelectionTitleLabel);
 		projectSelectionHorPanel.add(projectSelectionListBox);
-		projectSelectionHorPanel.add(calculateButton);
+		projectLocatonHorPanel.add(projectLocationTitleLabel);
+		projectLocatonHorPanel.add(projectLocationListBox);
 		
-		projectPriceHorPanel.add(projectPriceTitle);
-		projectPriceHorPanel.add(projectPriceTextBox);
-		
-		projectAnuOutHorPanel.add(projectAnuOutTitle);
-		projectAnuOutHorPanel.add(projectAnuOutTextBox);
-		
-		projectYearVHorPanel.add(projectYearVTitle);
-		projectYearVHorPanel.add(projectYearVTextBox);
-		
-		projectPBHorPanel.add(projectPBTitle);
-		projectPBHorPanel.add(projectPBTextBox);
+
 		
 		projectVerTab.add(projectTitleLabel);
 		projectVerTab.add(projectSelectionHorPanel);
+		projectVerTab.add(projectLocatonHorPanel);
 		projectVerTab.add(SystemPower);
 		projectVerTab.add(SystemPowerTB);
 		projectVerTab.add(DailyHr);
 		projectVerTab.add(DailyHrTB);
-		projectVerTab.add(projectPriceHorPanel);
-		projectVerTab.add(projectAnuOutHorPanel);
-		projectVerTab.add(projectYearVHorPanel);
-		projectVerTab.add(projectPBHorPanel);
-		
+
+		projectVerTab.add(projectNotesDisPanel);
 		projectTitleLabel.addStyleName("TitleLabel");
 	}
 	// energy use tab
@@ -173,7 +276,7 @@ public class SolarCalculator implements EntryPoint {
 			"Enter the amount of electricity you use and how much"
 					+ " you pay for it in the form below.");
 	// Description
-	private Label EnergyUseDescription = new Label(
+	private HTML EnergyUseDescription = new HTML(
 			"We will use this information to estimate how much "
 					+ "electricity you use on a typical day for each month of the year. This is then used "
 					+ "to estimate how much renewable energy will be imported and exported from your chosen "
@@ -181,23 +284,19 @@ public class SolarCalculator implements EntryPoint {
 	// Energy Use
 	private UseEnergy energyUseCalcu = new UseEnergy();
 	// -------------------------------------------------------------------
-	private HorizontalPanel energyUseHorPanel = new HorizontalPanel();
 	// Result
-	private VerticalPanel energyUseResultPanel = new VerticalPanel();
 	private Label energyUseResultTitleLabel = new Label("Energy Use");
-	private HorizontalPanel energyUseProfileHorPanel = new HorizontalPanel();
-	private Label energyUseProfileLabel = new Label("Energy Use Profile");
-	private ListBox energyUseProfileListBox = new ListBox();
+//	private HorizontalPanel energyUseProfileHorPanel = new HorizontalPanel();
+//	private Label energyUseProfileLabel = new Label("Energy Use Profile");
+//	private ListBox energyUseProfileListBox = new ListBox();
 	private HorizontalPanel energyUseYearTotalPanel = new HorizontalPanel();
 	private Label energyUseYearTotalLabel = new Label("Used Yearly");
 	private TextBox energyUseYearTotalBox = new TextBox();
 	private Label energyUseYearTotalUnit = new Label(" kWh/year	");
 	// Input
-	private VerticalPanel energyUseCalcSubPanel = new VerticalPanel();
 	private Label energyUseCalcTitleSubLabel = new Label(
 			"Energy Use Calculator");
-	private Label energyUseCalcDecripLabel = new Label(
-			"Use this calculator to calculate yearly "
+	private HTML energyUseCalcDecripLabel = new HTML("Use this calculator to calculate yearly "
 					+ "electricity use if you have the amount used over a different period.");
 	private HorizontalPanel energyUseCalcInputPanel = new HorizontalPanel();
 	private ListBox energyUseCalcInputListBox = new ListBox();
@@ -207,54 +306,51 @@ public class SolarCalculator implements EntryPoint {
 
 	// Average Rate
 	// Calculator-------------------------------------------------------------------
-	private HorizontalPanel supplyInfoHorPanel = new HorizontalPanel();
 	// Rate Result
-	private VerticalPanel supplyInfoResultPanel = new VerticalPanel();
 	private Label supplyInforResultTitleLabel = new Label("Supply Information");
 	private HorizontalPanel supplyInfoResultOutputPanel = new HorizontalPanel();
 	private Label supplyInfoResultOutputLabel = new Label("Import Tariff");
 	private TextBox supplyInfoResultOutputTextBox = new TextBox();
 	private Label supplyInfoResultOutputUnit = new Label("p/kWh");
-	private Button supplyInfoResultButton = new Button("Recalculate Now");
+//	private Button supplyInfoResultButton = new Button("Recalculate Now");
 	// Rate Input
-	private VerticalPanel supplyInfoInputPanel = new VerticalPanel();
 	private Label supplyInfoInputTitle = new Label("Average Rate Calculator");
-	private Label supplyInfoInputDescription = new Label(
-			"Use this calculator if your electricity"
+	private HTML supplyInfoInputDescription = new HTML("Use this calculator if your electricity"
 					+ " bill gives two prices for electricity. We will calculate an average price per ");
-	private HorizontalPanel supplyInfoInputFirstPanel = new HorizontalPanel();
-	private Label supplyInfoInputFirstLabel1 = new Label("First Rate");
-	private TextBox supplyInfoInputFirstTextBox2 = new TextBox();
-	private Label supplyInfoInputFirstLabel3 = new Label("kWh	at ");
-	private TextBox supplyInfoInputFirstTextBox4 = new TextBox();
-	private Label supplyInfoInputFirstLabel5 = new Label("p");
-	private HorizontalPanel supplyInfoInputSecondPanel = new HorizontalPanel();
-	private Label supplyInfoInputSecondLabel1 = new Label("Second Rate");
-	private TextBox supplyInfoInputSecondTextBox2 = new TextBox();
-	private Label supplyInfoInputSecondLabel3 = new Label("kWh	at ");
-	private TextBox supplyInfoInputSecondTextBox4 = new TextBox();
-	private Label supplyInfoInputSecondLabel5 = new Label("p");
-	private Button supplyInfoInputButtion = new Button(
-			"Calculate Import Tariff");
+//	private HorizontalPanel supplyInfoInputFirstPanel = new HorizontalPanel();
+//	private Label supplyInfoInputFirstLabel1 = new Label("First Rate");
+//	private TextBox supplyInfoInputFirstTextBox2 = new TextBox();
+//	private Label supplyInfoInputFirstLabel3 = new Label("kWh	at ");
+//	private TextBox supplyInfoInputFirstTextBox4 = new TextBox();
+//	private Label supplyInfoInputFirstLabel5 = new Label("p");
+//	private HorizontalPanel supplyInfoInputSecondPanel = new HorizontalPanel();
+//	private Label supplyInfoInputSecondLabel1 = new Label("Second Rate");
+//	private TextBox supplyInfoInputSecondTextBox2 = new TextBox();
+//	private Label supplyInfoInputSecondLabel3 = new Label("kWh	at ");
+//	private TextBox supplyInfoInputSecondTextBox4 = new TextBox();
+//	private Label supplyInfoInputSecondLabel5 = new Label("p");
+//	private Button supplyInfoInputButtion = new Button("Calculate Import Tariff");
 	
 	public void BuildEnergyUseTab(){
+		
 		// assemble widgets in energy use tab of input tab
 		// panel=============================================
 		// Energy Use ------------------------------------------------
-		// Result panel
-		energyUseProfileListBox.addItem("Domestic Home", "1");
-		energyUseProfileListBox.addItem("Comercial Office", "2");
-		
-		energyUseProfileHorPanel.add(energyUseProfileLabel);
-		energyUseProfileHorPanel.add(energyUseProfileListBox);
-		energyUseYearTotalPanel.add(energyUseYearTotalLabel);
-		energyUseYearTotalPanel.add(energyUseYearTotalBox);
-		energyUseYearTotalPanel.add(energyUseYearTotalUnit);
-		supplyInfoResultOutputUnit.addStyleName("unitLabel");
-		energyUseResultPanel.add(energyUseResultTitleLabel);
-		energyUseResultPanel.add(energyUseProfileHorPanel);
-		energyUseResultPanel.add(energyUseYearTotalPanel);
 		// Input panel
+		energyUseCalcInputTextBox.addKeyUpHandler(new KeyUpHandler() {
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				// TODO Auto-generated method stub
+				final String userInput;
+				userInput = energyUseCalcInputTextBox.getText();
+				energyUseCalcu.setEnergyUse(userInput);
+				energyUseCalcu.setYearlyEnergyUse(energyUseCalcInputListBox.getSelectedIndex());
+				energyUseYearTotalBox.setText(energyUseCalcu.getYearlyEnergyUse().toString());
+				project.setDayTimeUsage(Double.parseDouble(energyUseYearTotalBox.getText()));
+			}
+		});
+		
 		energyUseCalcInputListBox.addItem("Daily Energy Use", "1");
 		energyUseCalcInputListBox.addItem("Monthly Energy Use", "2");
 		energyUseCalcInputListBox.addItem("Quarterly Energy Use", "3");
@@ -265,98 +361,88 @@ public class SolarCalculator implements EntryPoint {
 		energyUseCalcInputPanel.add(energyUseCalcInputTextBox);
 		energyUseCalcInputPanel.add(energyUseCalcInputUnit);
 		energyUseCalcInputUnit.addStyleName("unitLabel");
-		energyUseCalcSubPanel.add(energyUseCalcTitleSubLabel);
-		energyUseCalcSubPanel.add(energyUseCalcDecripLabel);
-		energyUseCalcSubPanel.add(energyUseCalcInputPanel);
-		energyUseCalcSubPanel.add(energyUseCalcButtion);
+
+		// Result panel
+//		energyUseProfileListBox.addItem("Domestic Home", "1");
+//		energyUseProfileListBox.addItem("Comercial Office", "2");
+//		energyUseProfileHorPanel.add(energyUseProfileLabel);
+//		energyUseProfileHorPanel.add(energyUseProfileListBox);
+		energyUseYearTotalPanel.add(energyUseYearTotalLabel);
+		energyUseYearTotalPanel.add(energyUseYearTotalBox);
+		energyUseYearTotalPanel.add(energyUseYearTotalUnit);
+		supplyInfoResultOutputUnit.addStyleName("unitLabel");
 		
-		energyUseCalcButtion.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				final String userInput;
-				userInput = energyUseCalcInputTextBox.getText();
-				energyUseCalcu.setEnergyUse(userInput);
-				energyUseCalcu.setYearlyEnergyUse(energyUseCalcInputListBox.getSelectedIndex());
-				energyUseYearTotalBox.setText(energyUseCalcu.getYearlyEnergyUse().toString());
-			}
-		});
-		
-		// Energy Use
-		energyUseHorPanel.add(energyUseResultPanel);
-		energyUseHorPanel.add(energyUseCalcSubPanel);
 		// add style name
 		energyUseResultTitleLabel.addStyleName("TitleLabel");
 		energyUseCalcTitleSubLabel.addStyleName("TitleLabel");
-		energyUseResultPanel.addStyleName("EnergyUseHorRes");
-		energyUseCalcSubPanel.addStyleName("EnergyUseHor");
 		// End Energy Use
 
-		// Average Rate Calculator
-		// ------------------------------------------------
+//		// Average Rate Calculator
+//		supplyInfoInputButtion.addClickHandler(new ClickHandler() {
+//			
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				energyUseCalcu.setPrice1(supplyInfoInputFirstTextBox4.getText());
+//				energyUseCalcu.setPrice2(supplyInfoInputSecondTextBox4.getText());
+//				energyUseCalcu.setRate1(supplyInfoInputFirstTextBox2.getText());
+//				energyUseCalcu.setRate2(supplyInfoInputSecondTextBox2.getText());
+//				energyUseCalcu.setAvgRate();
+//				supplyInfoResultOutputTextBox.setText(energyUseCalcu.getAvgRate().toString());
+//			}
+//		});
+//		// ------------------------------------------------
+//		// Input Panel
+//		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel1);
+//		supplyInfoInputFirstPanel.add(supplyInfoInputFirstTextBox2);
+//		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel3);
+//		supplyInfoInputFirstLabel3.addStyleName("unitLabel");
+//		supplyInfoInputFirstPanel.add(supplyInfoInputFirstTextBox4);
+//		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel5);
+//		supplyInfoInputFirstLabel5.addStyleName("unitLabel");
+//		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel1);
+//		supplyInfoInputSecondPanel.add(supplyInfoInputSecondTextBox2);
+//		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel3);
+//		supplyInfoInputSecondLabel3.addStyleName("unitLabel");
+//		supplyInfoInputSecondPanel.add(supplyInfoInputSecondTextBox4);
+//		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel5);
+//		supplyInfoInputSecondLabel5.addStyleName("unitLabel");
+
 		// Output Panel
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputLabel);
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputTextBox);
 		supplyInfoResultOutputPanel.add(supplyInfoResultOutputUnit);
 		supplyInfoResultOutputUnit.addStyleName("unitLabel");
-		supplyInfoResultPanel.add(supplyInforResultTitleLabel);
-		supplyInfoResultPanel.add(supplyInfoResultOutputPanel);
-		supplyInfoResultPanel.add(supplyInfoResultButton);
-		// Input Panel
-		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel1);
-		supplyInfoInputFirstPanel.add(supplyInfoInputFirstTextBox2);
-		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel3);
-		supplyInfoInputFirstLabel3.addStyleName("unitLabel");
-		supplyInfoInputFirstPanel.add(supplyInfoInputFirstTextBox4);
-		supplyInfoInputFirstPanel.add(supplyInfoInputFirstLabel5);
-		supplyInfoInputFirstLabel5.addStyleName("unitLabel");
-		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel1);
-		supplyInfoInputSecondPanel.add(supplyInfoInputSecondTextBox2);
-		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel3);
-		supplyInfoInputSecondLabel3.addStyleName("unitLabel");
-		supplyInfoInputSecondPanel.add(supplyInfoInputSecondTextBox4);
-		supplyInfoInputSecondPanel.add(supplyInfoInputSecondLabel5);
-		supplyInfoInputSecondLabel5.addStyleName("unitLabel");
-		supplyInfoInputPanel.add(supplyInfoInputTitle);
-		supplyInfoInputPanel.add(supplyInfoInputDescription);
-		supplyInfoInputPanel.add(supplyInfoInputFirstPanel);
-		supplyInfoInputPanel.add(supplyInfoInputSecondPanel);
-		supplyInfoInputPanel.add(supplyInfoInputButtion);
-		
-		supplyInfoInputButtion.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				energyUseCalcu.setPrice1(supplyInfoInputFirstTextBox4.getText());
-				energyUseCalcu.setPrice2(supplyInfoInputSecondTextBox4.getText());
-				energyUseCalcu.setRate1(supplyInfoInputFirstTextBox2.getText());
-				energyUseCalcu.setRate2(supplyInfoInputSecondTextBox2.getText());
-				energyUseCalcu.setAvgRate();
-				supplyInfoResultOutputTextBox.setText(energyUseCalcu.getAvgRate().toString());
-			}
-		});
-		// Average Rate Calculator
-		supplyInfoHorPanel.add(supplyInfoResultPanel);
-		supplyInfoHorPanel.add(supplyInfoInputPanel);
+	
 		// add style name
 		supplyInforResultTitleLabel.addStyleName("TitleLabel");
 		supplyInfoInputTitle.addStyleName("TitleLabel");
-		supplyInfoResultPanel.addStyleName("EnergyUseHorRes");
-		supplyInfoInputPanel.addStyleName("EnergyUseHor");
 
 		// End Average Rate Calculator
 		// Use vertical panel ------------------------------------------------
 		energyUseVerTab.add(EnergyUseTitle);
 		energyUseVerTab.add(EnergyUseDescription);
-		energyUseVerTab.add(energyUseHorPanel);
-		energyUseVerTab.add(supplyInfoHorPanel);
+		energyUseVerTab.add(energyUseCalcTitleSubLabel);
+		energyUseVerTab.add(energyUseCalcDecripLabel);
+		energyUseVerTab.add(energyUseCalcInputPanel);
+//		energyUseVerTab.add(energyUseCalcButtion);
+//		energyUseVerTab.add(energyUseResultTitleLabel);
+//		energyUseVerTab.add(energyUseProfileHorPanel);
+		energyUseVerTab.add(energyUseYearTotalPanel);
+//		energyUseVerTab.add(supplyInfoInputTitle);
+//		energyUseVerTab.add(supplyInfoInputDescription);
+//		energyUseVerTab.add(supplyInfoInputFirstPanel);
+//		energyUseVerTab.add(supplyInfoInputSecondPanel);
+//		energyUseVerTab.add(supplyInfoInputButtion);
+		energyUseVerTab.add(supplyInforResultTitleLabel);
+		energyUseVerTab.add(supplyInfoResultOutputPanel);
+//		energyUseVerTab.add(supplyInfoResultButton);
 
 		EnergyUseTitle.addStyleName("TitleLabel");
 		EnergyUseDescription.addStyleName("Description");
 		energyUseCalcDecripLabel.addStyleName("Description");
 		supplyInfoInputDescription.addStyleName("Description");
 		energyUseYearTotalUnit.addStyleName("unitLabel");	
+
 	}
 	
 	// Return On Investment
@@ -406,8 +492,7 @@ public class SolarCalculator implements EntryPoint {
 		ROITable.setText(0, 7, "Accumulated Total");
 		ROITable.setText(0, 8, "ROI");
 		ROITable.getRowFormatter().addStyleName(0, "ROITableHeader");
-		ROITable.setStyleName("ROITable");
-		ROITable.setWidth("900px");
+		ROITable.setWidth("650px");
 		
 		ROINote.add(ROINoteHTML);
 		ROITabVerPanel.add(ROITitleLabel);
@@ -439,21 +524,17 @@ public class SolarCalculator implements EntryPoint {
 			ROITable.setText(i, 6, project.parseNumberFormat(project.getAnnualSave()));
 			ROITable.setText(i, 7, project.parseNumberFormat(cumSaving));
 			ROITable.setText(i, 8, project.parseNumberFormat(ROI)+ "%");
+			ROITable.getRowFormatter().addStyleName(i, "ROITableCell");
 		}
 	}
-	// Disclosure
+	
+	// Location
 	// ====================================================================
-	private DisclosurePanel notesDisPanel = new DisclosurePanel(
-			"Click Here For Notes.");
-	private Label noteLabel = new Label(
-			"The entry fields above show the "
-					+ "current project name and gives you a list of other projects you can select. You can "
-					+ "change the project name at any time to create a new project."
-					+ "Pressing the save button will store your project permanently with "
-					+ "RenSMART. You will be able to load the project again when you revisit the "
-					+ "site, and it will be listed on your RenSMART member home page");
-
-	private TabPanel inputTabPanel = new TabPanel();
+	private  VerticalPanel locationVerTab = new VerticalPanel();
+	
+	// footer
+	// ====================================================================
+	private HorizontalPanel footer = new HorizontalPanel();
 
 	/**
 	 * This is the entry point method.
@@ -463,20 +544,22 @@ public class SolarCalculator implements EntryPoint {
 		BuildProjectTab();
 		BuildEnergyUseTab();
 		BuildROITab();
-
-		inputTabPanel.add(projectVerTab, "Your Project");
+		buildOutputPanel();
+		
+		inputTabPanel.add(projectVerTab, "Step1:Project");
 		inputTabPanel.selectTab(0);
-		inputTabPanel.add(energyUseVerTab, "Energy Use");
+		inputTabPanel.add(energyUseVerTab, "Step2:Energy Use");
 		inputTabPanel.add(ROITabVerPanel, "ROI");
-		// assemble DisclosurePanel for notes
-		notesDisPanel.add(noteLabel);
+
 		
 		// assemble main panel
 		mainPanel.add(Banner);
-		mainPanel.add(inputTabPanel);
-		mainPanel.add(notesDisPanel);
+		bodyPanel.add(inputTabPanel);
+		bodyPanel.add(outputPanel);
+		mainPanel.add(bodyPanel);
+		
 		mainPanel.addStyleName("main");
-		inputTabPanel.setWidth("1000px");
+		inputTabPanel.setWidth("700px");
 
 		// associate the main panel with html host page
 		RootPanel.get("calculator").add(mainPanel);

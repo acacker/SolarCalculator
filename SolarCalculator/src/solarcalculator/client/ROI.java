@@ -83,7 +83,7 @@ public class ROI {
 	 * @param importCost the importCost to set
 	 */
 	public void setImportCost(Double importCost) {
-		this.importCost = (useEnergy.getYearlyEnergyUse() - project.getDateTimeUsage()) * importTariff;
+		this.importCost = (useEnergy.getYearlyEnergyUse() - project.getDayTimeUsage()) * importTariff;
 	}
 	/**
 	 * @return the exportValue
@@ -95,7 +95,7 @@ public class ROI {
 	 * @param exportValue the exportValue to set
 	 */
 	public void setExportValue(Double exportValue) {
-		this.exportValue = (project.getAnnualSolarGen() - project.getDateTimeUsage()) * exportTariff;
+		this.exportValue = (project.getAnnualSolarGen() - project.getDayTimeUsage()) * exportTariff;
 	}
 	/**
 	 * @return the usedValue
@@ -107,7 +107,7 @@ public class ROI {
 	 * @param usedValue the usedValue to set
 	 */
 	public void setUsedValue(Double usedValue) {
-		this.usedValue = project.getDateTimeUsage() * importTariff;
+		this.usedValue = project.getDayTimeUsage() * importTariff;
 	}
 	/**
 	 * @return the solarFitValue

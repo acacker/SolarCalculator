@@ -36,10 +36,7 @@ public class Project {
 	private Double replacementGen = 4.5;
 	private Double exportGen;
 	private Double compountInvRate=0.05;
-	
 	private Double importCost = 0.0;
-	
-	private UseEnergy useEnergy;
 
 	public Project() {
 	}
@@ -147,17 +144,15 @@ public class Project {
 	}
 	
 	public Double getAnnualSolarGen(){
-		return this.getDailySolarGen()*365;
+		return getDailySolarGen()*365;
 	}
 	
-	
-
-	public Double getDateTimeUsage() {
+	public Double getDayTimeUsage(){
 		return dayTimeUsage;
 	}
 
-	public void setDateTimeUsage() {
-		this.dayTimeUsage = useEnergy.getYearlyEnergyUse() * dayTimeRate;
+	public void setDayTimeUsage(Double yearlyEnergyUse) {
+		this.dayTimeUsage = yearlyEnergyUse/365 * dayTimeRate;
 	}
 
 	public Double getDailySave() {
@@ -185,6 +180,9 @@ public class Project {
 		return tariffFee;
 	}
 
+	public void setIndexTariff(Double taf) {
+		this.tariffFee = taf;
+	}
 	public void setTariffFee() {
 		this.tariffFee = tariffFee*Math.pow((1 + annualTariffInc) , year);
 	}
@@ -222,7 +220,6 @@ public class Project {
 	public Double getImportCost() {
 		return importCost;
 	}
-
 	
 	public Double getUsedValue(){
 		return replacementGen * tariffFee;
