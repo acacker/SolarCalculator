@@ -17,7 +17,7 @@ public class UseEnergyTest {
 
 	@Test
 	public void testGetYearlyEnergyUse() {
-		instance.setEnergyUse("120.00");
+		instance.setEnergyUse(120.00);
 		instance.setYearlyEnergyUse(2);
 		System.out.println(instance.getYearlyEnergyUse().toString());
 	}
@@ -34,7 +34,7 @@ public class UseEnergyTest {
 
 	@Test
 	public void testGetEnergyUse() {
-		instance.setEnergyUse("123.00");
+		instance.setEnergyUse(1.00);
 		System.out.println(instance.getEnergyUse());
 	}
 

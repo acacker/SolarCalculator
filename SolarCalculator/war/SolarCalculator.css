@@ -36,14 +36,17 @@
 }
 
 .gwt-TabBarItem {
+  width: 180px;
   height: 20px;
   cursor: pointer;
   margin-right: 2px;
+  text-align: center;
 }
 
 .gwt-TabBarItem-selected {
   margin-right: 2px;
-  width: 150px;
+  width: 180px;
+  text-align: center;
 }
 
 .gwt-TabBar {
@@ -52,11 +55,12 @@
 }
 .gwt-Label{
 	height: 20px;
-	width: 120px;
-	margin-left: 10px;
+	width: 170px;
 	margin-bottom: 10px;
+	margin-right: 10px;
 	font-family: century gothic;
 	font-size: 10pt;
+	text-align: right;
 }
 
 .gwt-HTML{
@@ -75,6 +79,7 @@
 	border-bottom: thin;
 	border-bottom-color: black;
 	border-bottom-style: solid;
+	text-align: left;
 }
 
 .Description{

@@ -26,7 +26,7 @@ public class ROI {
 	
 	public void initTable(){
 		year = 0;
-		importTariff = useEnergy.getAvgRate();
+		importTariff = project.getImportCost();
 		exportTariff = project.getFeedInFee();
 		SolarFitTariff = project.getTariffFee();
 	}

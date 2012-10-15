@@ -23,9 +23,24 @@ public class Project {
 	private Double panelEfficiency = 1.0;// decreasing annually
 	private Double PanelAgeEffLoss = 0.01;
 	private Double inverterEfficiency = 0.96;
-	private Double dailyHours = 4.5;
+	private Double dailySunLightHr = 4.5;
 	private Double dayTimeUsage;
-	private Double dayTimeRate = 4.5/24;
+	private Double dayTimeRate;
+	/**
+	 * @return the dayTimeRate
+	 */
+	public Double getDayTimeRate() {
+		return dayTimeRate;
+	}
+
+	/**
+	 * @param dayTimeRate the dayTimeRate to set
+	 */
+	public void setDayTimeRate() {
+		this.dayTimeRate = dailySunLightHr/24;
+	}
+
+
 	private Double tariffFee = 0.19;// increasing annually
 	private Double annualTariffInc = 0.005;
 	private Double feedInFee = 0.50;
@@ -33,10 +48,25 @@ public class Project {
 	private Double dailySolarGen;
 	private Double dailySave;
 	private Double paybackTime;
-	private Double replacementGen = 4.5;
 	private Double exportGen;
 	private Double compountInvRate=0.05;
 	private Double importCost = 0.0;
+	/**
+	 * @return the annualTariffInc
+	 */
+	public Double getAnnualTariffInc() {
+		return annualTariffInc;
+	}
+
+	/**
+	 * @param annualTariffInc the annualTariffInc to set
+	 */
+	public void setAnnualTariffInc(Double annualTariffInc) {
+		this.annualTariffInc = annualTariffInc;
+	}
+
+
+
 
 	public Project() {
 	}
@@ -90,17 +120,17 @@ public class Project {
 	}
 
 	/**
-	 * @return the dailyHours
+	 * @return the dailySunLightHr
 	 */
-	public Double getDailyHours() {
-		return dailyHours;
+	public Double getdailySunLightHr() {
+		return dailySunLightHr;
 	}
 
 	/**
-	 * @param dailyHours the dailyHours to set
+	 * @param dailySunLightHr the dailySunLightHr to set
 	 */
-	public void setDailyHours(Double dailyHours) {
-		this.dailyHours = dailyHours;
+	public void setdailySunLightHr(Double dailySunLightHr) {
+		this.dailySunLightHr = dailySunLightHr;
 	}
 
 	/**
@@ -125,7 +155,7 @@ public class Project {
 	}
 
 	public Double getExportGen() {
-		exportGen = this.getDailySolarGen() - replacementGen;
+		exportGen = this.getDailySolarGen() - dayTimeUsage;
 		return exportGen;
 	}
 
@@ -139,7 +169,7 @@ public class Project {
 
 	public Double getDailySolarGen() {
 		dailySolarGen = (systemPower * (efficiencyNorth *(1-efficiencyLossNorth) + efficiencyWest *(1- efficiencyLossWest)))* 
-				panelEfficiency*Math.pow((1-PanelAgeEffLoss), year) * inverterEfficiency * dailyHours;
+				panelEfficiency*Math.pow((1-PanelAgeEffLoss), year) * inverterEfficiency * dailySunLightHr;
 		return dailySolarGen;
 	}
 	
@@ -156,7 +186,7 @@ public class Project {
 	}
 
 	public Double getDailySave() {
-		dailySave = replacementGen * tariffFee + this.getExportGen() * feedInFee;
+		dailySave = dayTimeUsage * tariffFee + this.getExportGen() * feedInFee;
 		return dailySave;
 	}
 
@@ -222,7 +252,7 @@ public class Project {
 	}
 	
 	public Double getUsedValue(){
-		return replacementGen * tariffFee;
+		return dayTimeUsage * tariffFee;
 	}
 	
 	
