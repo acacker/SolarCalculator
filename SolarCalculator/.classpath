@@ -11,6 +11,5 @@
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/gwt-user.jar"/>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar"/>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080120-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar"/>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/gwtext.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
