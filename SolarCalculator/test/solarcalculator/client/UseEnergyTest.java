@@ -16,26 +16,44 @@ public class UseEnergyTest {
 	}
 
 	@Test
-	public void testGetYearlyEnergyUse() {
-		instance.setEnergyUse("120.00");
+	public void testSetYearlyEnergyUseByDailyUsage() {
+		String energyUse="1.0";
+		instance.setEnergyUse(energyUse);
+		assertTrue(instance.getEnergyUse()==1.0);
+		instance.setYearlyEnergyUse(0);
+		assertTrue(instance.getYearlyEnergyUse()==365.0);
+	}
+	
+	@Test
+	public void testSetYearlyEnergyUseByMonthlyUsage() {
+		String energyUse="1.0";
+		instance.setEnergyUse(energyUse);
+		assertTrue(instance.getEnergyUse()==1.0);
+		instance.setYearlyEnergyUse(1);
+		assertTrue(instance.getYearlyEnergyUse()==12.0);
+	}
+	
+	@Test
+	public void testSetYearlyEnergyUseByQuarterlyUsage() {
+		String energyUse="1.0";
+		instance.setEnergyUse(energyUse);
+		assertTrue(instance.getEnergyUse()==1.0);
 		instance.setYearlyEnergyUse(2);
-		System.out.println(instance.getYearlyEnergyUse().toString());
+		assertTrue(instance.getYearlyEnergyUse()==4.0);
 	}
 
-	@Test
-	public void testSetYearlyEnergyUse() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testSetEnergyUse() {
-		fail("Not yet implemented");
+		String energyUse="1.0";
+		instance.setEnergyUse(energyUse);
+		assertTrue(instance.getEnergyUse()==1.0);
 	}
-
+	
 	@Test
 	public void testGetEnergyUse() {
 		instance.setEnergyUse("123.00");
-		System.out.println(instance.getEnergyUse());
+		assertTrue(instance.getEnergyUse()==123.00);
 	}
 
 }

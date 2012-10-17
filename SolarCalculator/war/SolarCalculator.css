@@ -36,14 +36,16 @@
 }
 
 .gwt-TabBarItem {
+	width: 160px;
   height: 20px;
   cursor: pointer;
   margin-right: 2px;
 }
 
 .gwt-TabBarItem-selected {
-  margin-right: 2px;
-  width: 150px;
+	width: 160px;
+  	margin-right: 2px;
+	
 }
 
 .gwt-TabBar {

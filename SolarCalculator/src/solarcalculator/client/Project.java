@@ -13,16 +13,16 @@ import com.google.gwt.i18n.client.NumberFormat;
  * 
  */
 public class Project {
-	private Integer year;
+	private Integer year = 0;
 	private Double systemPower = 4.5; // kW
 
-	private Double dailyHours = 4.5;
+	private Double dailyHours = 4.0;
 	private Double indicativePrice = 10000.00;
 	private Double dailySolarGen;
-	private double annualSolarGen;
+	private Double annualSolarGen;
 	private Double dailySave;
 	private Double annualSave;
-	private Double paybackTime;
+	private Double paybackTime = 1.0;
 	private Double replacementGen = 4.5;
 	private Double exportGen;
 	private Double compountInvRate=0.05;
@@ -30,8 +30,8 @@ public class Project {
 	
 	//advance information
 	private Double importTariff = 0.19;// increasing annually
-	private Double annualTariffInc = 0.005;
-	private Double feedInFee = 0.50;
+	private Double annualTariffInc = 0.05;
+	private Double feedInFee = 0.30;
 	private Double efficiencyNorth = 0.38;
 	private Double efficiencyWest = 0.62;
 	private Double efficiencyLossNorth = 0.05;
@@ -61,6 +61,21 @@ public class Project {
 		this.year = year;
 	}
 	
+	
+	/**
+	 * @return the annualTariffInc
+	 */
+	public Double getAnnualTariffInc() {
+		return annualTariffInc;
+	}
+
+	/**
+	 * @param annualTariffInc the annualTariffInc to set
+	 */
+	public void setAnnualTariffInc(Double annualTariffInc) {
+		this.annualTariffInc = annualTariffInc;
+	}
+
 	/**
 	 * @return the systemPower
 	 */
@@ -121,9 +136,10 @@ public class Project {
 	}
 	
 	public void setAnnualSolarGen(){
-		dailySolarGen = (systemPower * (efficiencyNorth *(1-efficiencyLossNorth) + efficiencyWest *(1- efficiencyLossWest)))* 
+		dailySolarGen = (systemPower * (efficiencyNorth *(1 - efficiencyLossNorth) + efficiencyWest *(1- efficiencyLossWest)))* 
 				panelEfficiency*Math.pow((1-PanelAgeEffLoss), year) * inverterEfficiency * dailyHours;
 		exportGen = dailySolarGen - replacementGen;
+		
 		annualSolarGen = dailySolarGen*365;
 	}
 	public Double getAnnualSolarGen(){
@@ -142,7 +158,7 @@ public class Project {
 		culmulativeSave = annualSave * paybackTime;
 		Double compoundInvReturn = indicativePrice * Math.pow(1 + compountInvRate, paybackTime);
 		while(culmulativeSave <= compoundInvReturn){
-			paybackTime += 0.1;
+			paybackTime += 1;
 			culmulativeSave = annualSave * paybackTime;
 			compoundInvReturn= annualSave * Math.pow(1+compountInvRate, paybackTime);
 		}
@@ -172,4 +188,85 @@ public class Project {
 		NumberFormat fmt=NumberFormat.getFormat("#0.00");
 		return fmt.format(value);
 	}	
+	
+	public Double getDailySolarGen() {
+		return dailySolarGen;
+	}
+
+	public void setDailySolarGen(Double dailySolarGen) {
+		this.dailySolarGen = dailySolarGen;
+	}
+
+	public Double getExportGen() {
+		return exportGen;
+	}
+
+	public void setExportGen(Double exportGen) {
+		this.exportGen = exportGen;
+	}
+
+	public Double getEfficiencyNorth() {
+		return efficiencyNorth;
+	}
+
+	public void setEfficiencyNorth(Double efficiencyNorth) {
+		this.efficiencyNorth = efficiencyNorth;
+	}
+
+	public Double getEfficiencyWest() {
+		return efficiencyWest;
+	}
+
+	public void setEfficiencyWest(Double efficiencyWest) {
+		this.efficiencyWest = efficiencyWest;
+	}
+
+	public Double getEfficiencyLossNorth() {
+		return efficiencyLossNorth;
+	}
+
+	public void setEfficiencyLossNorth(Double efficiencyLossNorth) {
+		this.efficiencyLossNorth = efficiencyLossNorth;
+	}
+
+	public Double getEfficiencyLossWest() {
+		return efficiencyLossWest;
+	}
+
+	public void setEfficiencyLossWest(Double efficiencyLossWest) {
+		this.efficiencyLossWest = efficiencyLossWest;
+	}
+
+	public Double getPanelEfficiency() {
+		return panelEfficiency;
+	}
+
+	public void setPanelEfficiency(Double panelEfficiency) {
+		this.panelEfficiency = panelEfficiency;
+	}
+
+	public Double getPanelAgeEffLoss() {
+		return PanelAgeEffLoss;
+	}
+
+	public void setPanelAgeEffLoss(Double panelAgeEffLoss) {
+		PanelAgeEffLoss = panelAgeEffLoss;
+	}
+
+	public Double getInverterEfficiency() {
+		return inverterEfficiency;
+	}
+
+	public void setInverterEfficiency(Double inverterEfficiency) {
+		this.inverterEfficiency = inverterEfficiency;
+	}
+
+	public Double getDailySave() {
+		return dailySave;
+	}
+
+	public void setDailySave(Double dailySave) {
+		this.dailySave = dailySave;
+	}
+	
 }

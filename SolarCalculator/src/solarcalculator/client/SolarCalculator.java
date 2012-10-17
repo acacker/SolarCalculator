@@ -83,16 +83,23 @@ public class SolarCalculator implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				int selected = projectSelectionListBox.getSelectedIndex();
+			
 				switch(selected){
 				case 1:
-					
-				break;
+					break;
 				case 2:
-					
-				break;
+					break;
 				case 3:
+					project.setReplacementGen(Double.parseDouble(energyUseYearTotalBox.getText()));
 					project.setImportTariff(Double.parseDouble(importTariffTextBox.getText()));
+					project.setAnnualTariffInc(Double.parseDouble(tariffIncrRateTextBox.getText())/100);
+					project.setFeedInFee(Double.parseDouble(feedInTariffTextBox.getText()));
+					project.setImportTariff(Double.parseDouble(importTariffTextBox.getText()));
+					break;
 				}
+				project.setAnnualSolarGen();
+				project.setAnnualSave();
+				project.setPaybackTime();
 				
 				String indicativePrice =  project.parseNumberFormat(project.getIndicativePrice());
 				String annualOutput = project.parseNumberFormat(project.getAnnualSolarGen());
@@ -170,20 +177,41 @@ public class SolarCalculator implements EntryPoint {
 				switch(selected){
 				case 1:
 					project=new Project(4.0, 10000.00);
+					usedEnergy = new UseEnergy();
 					SystemPowerLB.setSelectedIndex(1);
 					usedEnergy.setEnergyUse("0.24");
 					usedEnergy.setYearlyEnergyUse(0);
 					projectLocationListBox.setSelectedIndex(0);
+					project.setDailyHours(5.0);
+					energyUseCalcInputTextBox.setText(usedEnergy.getEnergyUse().toString());
+					energyUseYearTotalBox.setText(usedEnergy.getYearlyEnergyUse().toString());
+					importTariffTextBox.setText(project.getImportTariff().toString());
+					feedInTariffTextBox.setText(project.getFeedInFee().toString());
+					Double incri = project.getAnnualTariffInc()*100;
+					tariffIncrRateTextBox.setText(incri.toString());
 				break;
 				case 2:
 					project=new Project(5.0, 12000.00);
+					usedEnergy = new UseEnergy();
 					SystemPowerLB.setSelectedIndex(2);
 					usedEnergy.setEnergyUse("0.24");
 					usedEnergy.setYearlyEnergyUse(0);
 					projectLocationListBox.setSelectedIndex(0);
+					project.setDailyHours(5.0);
+					energyUseCalcInputTextBox.setText(usedEnergy.getEnergyUse().toString());
+					energyUseYearTotalBox.setText(usedEnergy.getYearlyEnergyUse().toString());
+					importTariffTextBox.setText(project.getImportTariff().toString());
+					feedInTariffTextBox.setText(project.getFeedInFee().toString());
+					Double incri2 = project.getAnnualTariffInc()*100;
+					tariffIncrRateTextBox.setText(incri2.toString());
 				break;
 				case 3:
 					project = new Project(0.0,0.0);
+					energyUseCalcInputTextBox.setText("");
+					energyUseYearTotalBox.setText("");
+					importTariffTextBox.setText("");
+					feedInTariffTextBox.setText("");
+					tariffIncrRateTextBox.setText("");
 				break;
 				}
 				outputNameTextBox.setText(projectSelectionListBox.getItemText(selected));
@@ -191,7 +219,6 @@ public class SolarCalculator implements EntryPoint {
 				outputPBTextBox.setText("0.0");
 				outputPriceTextBox.setText("0.0");
 				outputYearVTextBox.setText("0.0");
-				
 			}
 		});
 
@@ -239,24 +266,31 @@ public class SolarCalculator implements EntryPoint {
 				switch(SystemPowerLB.getSelectedIndex()){
 				case 0:
 					project.setSystemPower(3.0);
+					project.setIndicativePrice(8000.0);
 					break;
 				case 1:
 					project.setSystemPower(4.0);
+					project.setIndicativePrice(10000.0);
 					break;
 				case 2:
 					project.setSystemPower(5.0);
+					project.setIndicativePrice(12000.0);
 					break;
 				case 3:
 					project.setSystemPower(7.0);
+					project.setIndicativePrice(14000.0);
 					break;
 				case 4:
 					project.setSystemPower(9.0);
+					project.setIndicativePrice(16000.0);
 					break;
 				case 5:
 					project.setSystemPower(12.0);
+					project.setIndicativePrice(18000.0);
 					break;
 				case 6:
 					project.setSystemPower(18.0);
+					project.setIndicativePrice(20000.0);
 					break;
 				}
 			}
@@ -481,11 +515,12 @@ public class SolarCalculator implements EntryPoint {
 		Double annuSaving;
 		Double cumSaving = 0.0;
 		Double ROI = 0.0;
-		for(int i = 1; i < 15; i++){
+		Double impTafTemp = project.getImportTariff();
+		for(int i = 1; i < 10; i++){
 			
 			project.setYear(i);
 			project.setImportTariff(project.getImportTariff());
-			project.setAnnualSave();
+			project.setAnnualSolarGen();
 			project.setAnnualSave();
 			annuSaving = project.getAnnualSave();
 			cumSaving = cumSaving + annuSaving;
@@ -498,6 +533,8 @@ public class SolarCalculator implements EntryPoint {
 			ROITable.setText(4, i, project.parseNumberFormat(ROI)+ "%");
 			ROITable.getRowFormatter().addStyleName(i, "ROITableCell");
 		}
+		project.setYear(0);
+		project.setImportTariff(impTafTemp);
 	}
 	
 	// Location
