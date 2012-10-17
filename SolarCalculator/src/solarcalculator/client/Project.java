@@ -13,9 +13,25 @@ import com.google.gwt.i18n.client.NumberFormat;
  * 
  */
 public class Project {
-	
-	private Integer year = 0;
+	private Integer year;
 	private Double systemPower = 4.5; // kW
+
+	private Double dailyHours = 4.5;
+	private Double indicativePrice = 10000.00;
+	private Double dailySolarGen;
+	private double annualSolarGen;
+	private Double dailySave;
+	private Double annualSave;
+	private Double paybackTime;
+	private Double replacementGen = 4.5;
+	private Double exportGen;
+	private Double compountInvRate=0.05;
+	private Double culmulativeSave;
+	
+	//advance information
+	private Double importTariff = 0.19;// increasing annually
+	private Double annualTariffInc = 0.005;
+	private Double feedInFee = 0.50;
 	private Double efficiencyNorth = 0.38;
 	private Double efficiencyWest = 0.62;
 	private Double efficiencyLossNorth = 0.05;
@@ -23,20 +39,6 @@ public class Project {
 	private Double panelEfficiency = 1.0;// decreasing annually
 	private Double PanelAgeEffLoss = 0.01;
 	private Double inverterEfficiency = 0.96;
-	private Double dailyHours = 4.5;
-	private Double dayTimeUsage;
-	private Double dayTimeRate = 4.5/24;
-	private Double tariffFee = 0.19;// increasing annually
-	private Double annualTariffInc = 0.005;
-	private Double feedInFee = 0.50;
-	private Double indicativePrice = 10000.00;
-	private Double dailySolarGen;
-	private Double dailySave;
-	private Double paybackTime;
-	private Double replacementGen = 4.5;
-	private Double exportGen;
-	private Double compountInvRate=0.05;
-	private Double importCost = 0.0;
 
 	public Project() {
 	}
@@ -46,14 +48,25 @@ public class Project {
 		indicativePrice=price;
 	}
 	
-
+	/**
+	 * @return the year
+	 */
+	public Integer getYear() {
+		return year;
+	}
+	/**
+	 * @param year the year to set
+	 */
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+	
 	/**
 	 * @return the systemPower
 	 */
 	public Double getSystemPower() {
 		return systemPower;
 	}
-
 	/**
 	 * @param systemPower the systemPower to set
 	 */
@@ -62,59 +75,23 @@ public class Project {
 	}
 
 	/**
-	 * @return the efficiencyNorth
-	 */
-	public Double getEfficiencyNorth() {
-		return efficiencyNorth;
-	}
-
-	/**
-	 * @param efficiencyNorth the efficiencyNorth to set
-	 */
-	public void setEfficiencyNorth(Double efficiencyNorth) {
-		this.efficiencyNorth = efficiencyNorth;
-	}
-
-	/**
-	 * @return the efficiencyWest
-	 */
-	public Double getEfficiencyWest() {
-		return efficiencyWest;
-	}
-
-	/**
-	 * @param efficiencyWest the efficiencyWest to set
-	 */
-	public void setEfficiencyWest(Double efficiencyWest) {
-		this.efficiencyWest = efficiencyWest;
-	}
-
-	/**
 	 * @return the dailyHours
 	 */
 	public Double getDailyHours() {
 		return dailyHours;
 	}
-
 	/**
 	 * @param dailyHours the dailyHours to set
 	 */
 	public void setDailyHours(Double dailyHours) {
 		this.dailyHours = dailyHours;
 	}
-
+	
 	/**
-	 * @return the compountInvRate
+	 * @return the culmulativeSave
 	 */
-	public Double getCompountInvRate() {
-		return compountInvRate;
-	}
-
-	/**
-	 * @param compountInvRate the compountInvRate to set
-	 */
-	public void setCompountInvRate(Double compountInvRate) {
-		this.compountInvRate = compountInvRate;
+	public Double getCulmulativeSave() {
+		return culmulativeSave;
 	}
 
 	/**
@@ -123,68 +100,64 @@ public class Project {
 	public void setIndicativePrice(Double indicativePrice) {
 		this.indicativePrice = indicativePrice;
 	}
-
-	public Double getExportGen() {
-		exportGen = this.getDailySolarGen() - replacementGen;
-		return exportGen;
-	}
-
-	public void setExportGen(Double exportGen) {
-		this.exportGen = exportGen;
-	}
-
+	/*
+	 * @return indicativePrice
+	 */
 	public Double getIndicativePrice() {
 		return indicativePrice;
-	}
+	}	
 
-	public Double getDailySolarGen() {
+	/**
+	 * @return the replacementGen
+	 */
+	public Double getReplacementGen() {
+		return replacementGen;
+	}
+	/**
+	 * @param replacementGen the replacementGen to set
+	 */
+	public void setReplacementGen(Double yearlyEnergyUse) {
+		this.replacementGen = dailyHours * 1.0 * yearlyEnergyUse/365;
+	}
+	
+	public void setAnnualSolarGen(){
 		dailySolarGen = (systemPower * (efficiencyNorth *(1-efficiencyLossNorth) + efficiencyWest *(1- efficiencyLossWest)))* 
 				panelEfficiency*Math.pow((1-PanelAgeEffLoss), year) * inverterEfficiency * dailyHours;
-		return dailySolarGen;
+		exportGen = dailySolarGen - replacementGen;
+		annualSolarGen = dailySolarGen*365;
 	}
-	
 	public Double getAnnualSolarGen(){
-		return getDailySolarGen()*365;
-	}
-	
-	public Double getDayTimeUsage(){
-		return dayTimeUsage;
+		return annualSolarGen;
 	}
 
-	public void setDayTimeUsage(Double yearlyEnergyUse) {
-		this.dayTimeUsage = yearlyEnergyUse/365 * dayTimeRate;
+	public void setAnnualSave(){
+		dailySave = replacementGen * importTariff + exportGen * feedInFee;
+		annualSave = dailySave*365;
 	}
-
-	public Double getDailySave() {
-		dailySave = replacementGen * tariffFee + this.getExportGen() * feedInFee;
-		return dailySave;
-	}
-
 	public Double getAnnualSave(){
-		return this.getDailySave()*365;
+		return annualSave;
 	}
 	
-	public Double getPaybackTime() {
-		Double paybackTime=0.0;
-		Double culmulativeSave=this.getAnnualSave()*paybackTime;
-		Double compoundInvReturn=this.getIndicativePrice()*Math.pow(1+compountInvRate, paybackTime);
-		while(culmulativeSave<=compoundInvReturn){
-			paybackTime+=0.1;
-			culmulativeSave=this.getAnnualSave()*paybackTime;
-			compoundInvReturn=this.getIndicativePrice()*Math.pow(1+compountInvRate, paybackTime);
+	public void setPaybackTime() {
+		culmulativeSave = annualSave * paybackTime;
+		Double compoundInvReturn = indicativePrice * Math.pow(1 + compountInvRate, paybackTime);
+		while(culmulativeSave <= compoundInvReturn){
+			paybackTime += 0.1;
+			culmulativeSave = annualSave * paybackTime;
+			compoundInvReturn= annualSave * Math.pow(1+compountInvRate, paybackTime);
 		}
+		
+	}
+	public Double getPaybackTime(){
 		return paybackTime;
 	}
 
-	public Double getTariffFee() {
-		return tariffFee;
+	public Double getImportTariff() {
+		return importTariff;
 	}
 
-	public void setIndexTariff(Double taf) {
-		this.tariffFee = taf;
-	}
-	public void setTariffFee() {
-		this.tariffFee = tariffFee*Math.pow((1 + annualTariffInc) , year);
+	public void setImportTariff(Double taf) {
+		this.importTariff = taf * Math.pow((1 + annualTariffInc),year);
 	}
 
 	public Double getFeedInFee() {
@@ -198,36 +171,5 @@ public class Project {
 	public String parseNumberFormat(Double value){
 		NumberFormat fmt=NumberFormat.getFormat("#0.00");
 		return fmt.format(value);
-	}
-
-	/**
-	 * @return the year
-	 */
-	public Integer getYear() {
-		return year;
-	}
-
-	/**
-	 * @param year the year to set
-	 */
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	/**
-	 * @return the importCost
-	 */
-	public Double getImportCost() {
-		return importCost;
-	}
-	
-	public Double getUsedValue(){
-		return replacementGen * tariffFee;
-	}
-	
-	
-	public Double getExportValue(){
-		return exportGen * feedInFee;
-	}
-	
+	}	
 }

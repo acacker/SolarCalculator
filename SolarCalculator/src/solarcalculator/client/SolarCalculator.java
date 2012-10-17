@@ -48,7 +48,6 @@ import com.google.gwt.user.client.ui.Widget;
 public class SolarCalculator implements EntryPoint {
 	private Project project;
 	private UseEnergy usedEnergy;
-	private ROI roiTable;
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private HorizontalPanel bodyPanel = new HorizontalPanel();
 	// Banner 
@@ -92,11 +91,7 @@ public class SolarCalculator implements EntryPoint {
 					
 				break;
 				case 3:
-					project = new Project();
-					project.setSystemPower(Double.parseDouble(SystemPowerTB.getText()));
-					project.setIndicativePrice(Double.parseDouble(outputPriceTextBox.getText()));
-					project.setIndexTariff(Double.parseDouble(importTariffTextBox.getText()));
-					project.setDayTimeUsage(Double.parseDouble(energyUseYearTotalBox.getText()));
+					project.setImportTariff(Double.parseDouble(importTariffTextBox.getText()));
 				}
 				
 				String indicativePrice =  project.parseNumberFormat(project.getIndicativePrice());
@@ -148,13 +143,10 @@ public class SolarCalculator implements EntryPoint {
 	private ListBox projectLocationListBox = new ListBox();
 	private HorizontalPanel systemPowerHorPanel = new HorizontalPanel();
 	private Label SystemPower = new Label("System Power:");
-	private TextBox SystemPowerTB = new TextBox();
+	private ListBox SystemPowerLB = new ListBox();
 	private HorizontalPanel dailyHorPanel = new HorizontalPanel();
 	private Label DailyHr = new Label("Daily Hour:");
 	private TextBox DailyHrTB = new TextBox();
-
-
-
 	private DisclosurePanel projectNotesDisPanel = new DisclosurePanel(
 			"Click Here For Notes.");
 	private HTML projectNoteLabel = new HTML(
@@ -177,21 +169,29 @@ public class SolarCalculator implements EntryPoint {
 				int selected = projectSelectionListBox.getSelectedIndex();
 				switch(selected){
 				case 1:
-					project=new Project(4.5, 10000.00);
+					project=new Project(4.0, 10000.00);
+					SystemPowerLB.setSelectedIndex(1);
+					usedEnergy.setEnergyUse("0.24");
+					usedEnergy.setYearlyEnergyUse(0);
+					projectLocationListBox.setSelectedIndex(0);
 				break;
 				case 2:
-					project=new Project(5.1, 18000.00);
+					project=new Project(5.0, 12000.00);
+					SystemPowerLB.setSelectedIndex(2);
+					usedEnergy.setEnergyUse("0.24");
+					usedEnergy.setYearlyEnergyUse(0);
+					projectLocationListBox.setSelectedIndex(0);
 				break;
 				case 3:
 					project = new Project(0.0,0.0);
 				break;
 				}
-				SystemPowerTB.setText(project.getSystemPower().toString());
 				outputNameTextBox.setText(projectSelectionListBox.getItemText(selected));
 				outputAnuOutTextBox.setText("0.0");
 				outputPBTextBox.setText("0.0");
 				outputPriceTextBox.setText("0.0");
 				outputYearVTextBox.setText("0.0");
+				
 			}
 		});
 
@@ -231,6 +231,37 @@ public class SolarCalculator implements EntryPoint {
 			}
 		});
 		
+		SystemPowerLB.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				// TODO Auto-generated method stub
+				switch(SystemPowerLB.getSelectedIndex()){
+				case 0:
+					project.setSystemPower(3.0);
+					break;
+				case 1:
+					project.setSystemPower(4.0);
+					break;
+				case 2:
+					project.setSystemPower(5.0);
+					break;
+				case 3:
+					project.setSystemPower(7.0);
+					break;
+				case 4:
+					project.setSystemPower(9.0);
+					break;
+				case 5:
+					project.setSystemPower(12.0);
+					break;
+				case 6:
+					project.setSystemPower(18.0);
+					break;
+				}
+			}
+		});
+		
 		
 		// assemble DisclosurePanel for notes
 		projectNotesDisPanel.add(projectNoteLabel);
@@ -252,13 +283,23 @@ public class SolarCalculator implements EntryPoint {
 		projectLocationListBox.addItem("WA","7");
 		projectLocationListBox.setVisibleItemCount(0);
 		
+		SystemPowerLB.addItem("3.0","0");
+		SystemPowerLB.addItem("4.0","1");
+		SystemPowerLB.addItem("5.0","2");
+		SystemPowerLB.addItem("7.0","3");
+		SystemPowerLB.addItem("9.0","4");
+		SystemPowerLB.addItem("12.0","5");
+		SystemPowerLB.addItem("18.0","6");
+		projectLocationListBox.setVisibleItemCount(0);
+		
+		
 		projectSelectionHorPanel.add(projectSelectionTitleLabel);
 		projectSelectionHorPanel.add(projectSelectionListBox);
 		projectLocatonHorPanel.add(projectLocationTitleLabel);
 		projectLocatonHorPanel.add(projectLocationListBox);
 		
 		systemPowerHorPanel.add(SystemPower);
-		systemPowerHorPanel.add(SystemPowerTB);
+		systemPowerHorPanel.add(SystemPowerLB);
 		dailyHorPanel.add(DailyHr);
 		dailyHorPanel.add(DailyHrTB);
 
@@ -321,7 +362,7 @@ public class SolarCalculator implements EntryPoint {
 				energyUseCalcu.setEnergyUse(userInput);
 				energyUseCalcu.setYearlyEnergyUse(energyUseCalcInputListBox.getSelectedIndex());
 				energyUseYearTotalBox.setText(energyUseCalcu.getYearlyEnergyUse().toString());
-				project.setDayTimeUsage(Double.parseDouble(energyUseYearTotalBox.getText()));
+				project.setReplacementGen(Double.parseDouble(energyUseYearTotalBox.getText()));
 			}
 		});
 		
@@ -420,15 +461,11 @@ public class SolarCalculator implements EntryPoint {
 	
 	public void BuildROITab(){
 		ROITable.setText(0, 0, "Year");
-		ROITable.setText(0, 1, "Import Tariff");
-		ROITable.setText(0, 2, "Export Tariff");
-		ROITable.setText(0, 3, "Export Value");
-		ROITable.setText(0, 4, "Used Value");
-		ROITable.setText(0, 5, "Annual Generate");
-		ROITable.setText(0, 6, "Year Total");
-		ROITable.setText(0, 7, "Accumulated Total");
-		ROITable.setText(0, 8, "ROI");
-		ROITable.getRowFormatter().addStyleName(0, "ROITableHeader");
+		ROITable.setText(1, 0, "Annual Generate");
+		ROITable.setText(2, 0, "Year Total");
+		ROITable.setText(3, 0, "Accumulated Total");
+		ROITable.setText(4, 0, "ROI");
+		ROITable.getColumnFormatter().addStyleName(0, "ROITableHeader");
 		ROITable.setWidth("650px");
 		
 		ROINote.add(ROINoteHTML);
@@ -441,26 +478,24 @@ public class SolarCalculator implements EntryPoint {
 	}
 
 	public void buildROITable(){
+		Double annuSaving;
 		Double cumSaving = 0.0;
 		Double ROI = 0.0;
 		for(int i = 1; i < 15; i++){
 			
-			roiTable.setYear(i);
-			roiTable.setImportTariff();
-			project.getAnnualSave();
-			cumSaving = cumSaving + project.getAnnualSave();
+			project.setYear(i);
+			project.setImportTariff(project.getImportTariff());
+			project.setAnnualSave();
+			project.setAnnualSave();
+			annuSaving = project.getAnnualSave();
+			cumSaving = cumSaving + annuSaving;
 			ROI = (cumSaving/project.getIndicativePrice()- 1)*100;
-			project.parseNumberFormat(project.getTariffFee());
 			
-			ROITable.setText(i, 0, roiTable.getYear().toString());
-			ROITable.setText(i, 1, project.parseNumberFormat(roiTable.getImportTariff()));
-			ROITable.setText(i, 2, project.parseNumberFormat(project.getFeedInFee()));
-			ROITable.setText(i, 3, project.parseNumberFormat(project.getExportValue()));
-			ROITable.setText(i, 4, project.parseNumberFormat(project.getUsedValue()));
-			ROITable.setText(i, 5, project.parseNumberFormat(project.getAnnualSolarGen()));
-			ROITable.setText(i, 6, project.parseNumberFormat(project.getAnnualSave()));
-			ROITable.setText(i, 7, project.parseNumberFormat(cumSaving));
-			ROITable.setText(i, 8, project.parseNumberFormat(ROI)+ "%");
+			ROITable.setText(0, i, project.getYear().toString());
+			ROITable.setText(1, i, project.parseNumberFormat(project.getAnnualSolarGen()));
+			ROITable.setText(2, i, project.parseNumberFormat(annuSaving));
+			ROITable.setText(3, i, project.parseNumberFormat(cumSaving));
+			ROITable.setText(4, i, project.parseNumberFormat(ROI)+ "%");
 			ROITable.getRowFormatter().addStyleName(i, "ROITableCell");
 		}
 	}
