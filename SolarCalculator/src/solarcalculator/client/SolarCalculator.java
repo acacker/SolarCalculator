@@ -48,6 +48,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class SolarCalculator implements EntryPoint {
 	private Project project;
 	private UseEnergy usedEnergy;
+	private ROI roiTable;
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private HorizontalPanel bodyPanel = new HorizontalPanel();
 	// Banner 
@@ -444,15 +445,15 @@ public class SolarCalculator implements EntryPoint {
 		Double ROI = 0.0;
 		for(int i = 1; i < 15; i++){
 			
-			project.setYear(i);
-			project.setTariffFee();
+			roiTable.setYear(i);
+			roiTable.setImportTariff();
 			project.getAnnualSave();
 			cumSaving = cumSaving + project.getAnnualSave();
 			ROI = (cumSaving/project.getIndicativePrice()- 1)*100;
 			project.parseNumberFormat(project.getTariffFee());
 			
-			ROITable.setText(i, 0, project.getYear().toString());
-			ROITable.setText(i, 1, project.parseNumberFormat(project.getTariffFee()));
+			ROITable.setText(i, 0, roiTable.getYear().toString());
+			ROITable.setText(i, 1, project.parseNumberFormat(roiTable.getImportTariff()));
 			ROITable.setText(i, 2, project.parseNumberFormat(project.getFeedInFee()));
 			ROITable.setText(i, 3, project.parseNumberFormat(project.getExportValue()));
 			ROITable.setText(i, 4, project.parseNumberFormat(project.getUsedValue()));

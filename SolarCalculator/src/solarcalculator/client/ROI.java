@@ -34,14 +34,14 @@ public class ROI {
 	/**
 	 * @return the year
 	 */
-	public int getYear() {
+	public Integer getYear() {
 		return year;
 	}
 	/**
 	 * @param year the year to set
 	 */
 	public void setYear(int colum) {
-		this.year = year + colum;
+		this.year = colum;
 	}
 	/**
 	 * @return the importTariff
@@ -52,8 +52,8 @@ public class ROI {
 	/**
 	 * @param importTariff the importTariff to set
 	 */
-	public void setImportTariff(int colum) {
-		this.importTariff = importTariff*(1+Math.pow(increaseRate, colum));
+	public void setImportTariff() {
+		this.importTariff = importTariff*(1+Math.pow(increaseRate, year));
 	}
 	/**
 	 * @return the exportTariff
