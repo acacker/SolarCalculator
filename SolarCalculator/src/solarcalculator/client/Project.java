@@ -3,6 +3,7 @@ package solarcalculator.client;
 import java.text.DecimalFormat;
 
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.ui.HTML;
 
 /**
  * project includes all data relevant for calculation
@@ -75,7 +76,6 @@ public class Project {
 	public void setAnnualTariffInc(Double annualTariffInc) {
 		this.annualTariffInc = annualTariffInc;
 	}
-
 	/**
 	 * @return the systemPower
 	 */
@@ -158,9 +158,10 @@ public class Project {
 		culmulativeSave = annualSave * paybackTime;
 		Double compoundInvReturn = indicativePrice * Math.pow(1 + compountInvRate, paybackTime);
 		while(culmulativeSave <= compoundInvReturn){
+			System.out.print(culmulativeSave <= compoundInvReturn);
 			paybackTime += 1;
 			culmulativeSave = annualSave * paybackTime;
-			compoundInvReturn= annualSave * Math.pow(1+compountInvRate, paybackTime);
+			compoundInvReturn = annualSave * Math.pow(1+compountInvRate, paybackTime);
 		}
 		
 	}

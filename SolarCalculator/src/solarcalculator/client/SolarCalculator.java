@@ -1,22 +1,16 @@
 package solarcalculator.client;
 
-import java.text.DecimalFormat;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -25,6 +19,11 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.gwt.charts.client.ChartLoader;
+import com.googlecode.gwt.charts.client.ChartPackage;
+import com.googlecode.gwt.charts.client.ColumnType;
+import com.googlecode.gwt.charts.client.DataTable;
+import com.googlecode.gwt.charts.client.corechart.BarChart;
 
 /**
  * Presentation on Monday 4: 35 room O412
@@ -52,7 +51,7 @@ public class SolarCalculator implements EntryPoint {
 	private HorizontalPanel bodyPanel = new HorizontalPanel();
 	// Banner 
 	// ====================================================================
-	private HorizontalPanel Banner = new HorizontalPanel();
+	private Label Banner = new Label("LPT Solar Calculator");
 	public void BuildBanner(){
 		Banner.setSize("1000px", "100px");
 		Banner.setStyleName("banner");
@@ -76,6 +75,7 @@ public class SolarCalculator implements EntryPoint {
 	private TextBox outputPBTextBox = new TextBox();
 	private Button calculateButton = new Button("Calculate");
 	
+	// Build Out Put Panel ====================================================
 	public void buildOutputPanel(){
 		// assemble widgets in the calculate panel
 		calculateButton.addClickHandler(new ClickHandler() {
@@ -112,6 +112,7 @@ public class SolarCalculator implements EntryPoint {
 				outputPBTextBox.setText(paybackTime);
 				
 				buildROITable();
+				buildChart();
 			}
 		});
 		outputPriceHorPanel.add(outputPriceTitle);
@@ -138,12 +139,13 @@ public class SolarCalculator implements EntryPoint {
 		outputPorjectName.addStyleName("TitleLabel");
 	}
 	
+	
 	// project tab
 	// ====================================================================
 	private VerticalPanel projectVerTab = new VerticalPanel();
-	private Label projectTitleLabel = new Label("Select Project");
+	private Label projectTitleLabel = new Label("Step1: Select Project");
 	private HorizontalPanel projectSelectionHorPanel = new HorizontalPanel();
-	private Label projectSelectionTitleLabel = new Label("Example Projects:");
+	private Label projectSelectionTitleLabel = new Label("Project");
 	private ListBox projectSelectionListBox = new ListBox();
 	private HorizontalPanel projectLocatonHorPanel = new HorizontalPanel();
 	private Label projectLocationTitleLabel = new Label("Location:");
@@ -154,20 +156,12 @@ public class SolarCalculator implements EntryPoint {
 	private HorizontalPanel dailyHorPanel = new HorizontalPanel();
 	private Label DailyHr = new Label("Daily Hour:");
 	private TextBox DailyHrTB = new TextBox();
-	private DisclosurePanel projectNotesDisPanel = new DisclosurePanel(
-			"Click Here For Notes.");
-	private HTML projectNoteLabel = new HTML(
-			"The entry fields above show the "+ 
-			"current project name and gives you a list of other projects you can select. You can "+
-			"change the project name at any time to create a new project." + 
-			"Pressing the save button will store your project permanently with " +
-			"RenSMART. You will be able to load the project again when you revisit the " +
-			"site, and it will be listed on your RenSMART member home page");
 
 	private TabPanel inputTabPanel = new TabPanel();
 	
+	// Build Project Tab ====================================================================
 	public void BuildProjectTab(){
-		
+		// 
 		projectSelectionListBox.addChangeHandler(new ChangeHandler() {
 			
 			@Override
@@ -297,9 +291,6 @@ public class SolarCalculator implements EntryPoint {
 		});
 		
 		
-		// assemble DisclosurePanel for notes
-		projectNotesDisPanel.add(projectNoteLabel);
-		
 		// assemble widgets in project tab of input tab panel
 		projectSelectionListBox.addItem("Please select your system model", "0");
 		projectSelectionListBox.addItem("Solar System Model-4.5kW", "1");
@@ -342,7 +333,6 @@ public class SolarCalculator implements EntryPoint {
 		projectVerTab.add(projectLocatonHorPanel);
 		projectVerTab.add(systemPowerHorPanel);
 		projectVerTab.add(dailyHorPanel);
-		projectVerTab.add(projectNotesDisPanel);
 		projectTitleLabel.addStyleName("TitleLabel");
 	}
 	// energy use tab
@@ -362,7 +352,7 @@ public class SolarCalculator implements EntryPoint {
 	private ListBox energyUseCalcInputListBox = new ListBox();
 	private TextBox energyUseCalcInputTextBox = new TextBox();
 	private Label energyUseCalcInputUnit = new Label("kWh");
-
+	
 	// Average Rate
 	// Calculator-------------------------------------------------------------------
 	// Rate Result
@@ -462,37 +452,14 @@ public class SolarCalculator implements EntryPoint {
 	private VerticalPanel ROITabVerPanel = new VerticalPanel();
 	private Label ROITitleLabel = new Label("The Financial Projection table gives year-by-year " +
 			"estimates of the income and costs for your project");
-	private HTML ROIDescriptionHTML = new HTML("All values in brackets are negative.</br>"+
-			"No increase based on inflation have been applied except in the case of" +
-			" import and export tariffs which may increase above the rate of inflation.</br>"+
-			"As no increase based on inflation has been included, the estimates should " +
-			"be taken as the value of money in today's terms.</br>"+
-			"Further information on each of the columns can be found by pressing the " +
-			"notes button at the bottom of the table.", true);
+	private HorizontalPanel optionHorPanel = new HorizontalPanel();
+	private Label optionTitle = new Label("Select a View");
+	private ListBox viewOption = new ListBox();
+	private Label optionYears = new Label("Years");
+	private HTML site = new HTML("<p>This is html with a <a href='www.google.com'>link</a></p>");
+	
 	private FlexTable ROITable = new FlexTable();
 	private DisclosurePanel ROINote = new DisclosurePanel("Click Here For Notes.");
-	private HTML ROINoteHTML = new HTML("Year - The financial year covered by this row with the project year in brackets." +
-			" Project years run from April to April. Import Tariff - The cost of importing a kWh of energy from the grid " +
-			"in pence.</br> This is the value you have entered under the Energy Use tab and is increased each project year " +
-			"by the Tariff Increase % above inflation value that you will find under the Advanced Fields also under the " +
-			"Energy Use tab.</br>Export Tariff - The value of exporting a kWh of energy to the grid in pence. This value can " +
-			"be changed under the Advanced Fields on the Energy Use tab. Like the import tariff, this value is increased" +
-			" each project year by the Tariff Increase % above inflation value that you will find under the Advanced" +
-			" Fields also under the Energy Use tab. As part of the Clean Energy Cash Back scheme, the minimum value of" +
-			" an exported kWh is 3p. It is not currently clear whether this value will be increased in line with energy " +
-			"prices or the retail prices index.</br> Solar FIT Tariff - The amount given by your electricity supplier for " +
-			"each kWh you generate from your proposed solar PV installation.</br>Wind FIT Tariff - The amount given by your " +
-			"electricity supplier for each kWh you generate from your proposed wind turbine </br> Maintenance Cost - The " +
-			"estimated cost of maintaining your system in running order each year. </br> Import Cost - The estimated " +
-			"total cost of the energy used at your location </br> Export Value - The estimated total value of the energy " +
-			"you export from your property to the grid </br> Used Value - The value of the energy you have generated that" +
-			" you use at your location </br> Wind FIT Value - The total value of the feed-in tariff you would receive for " +
-			"energy generated from the wind </br> Solar FIT Value - The total value of the feed-in tariff you would receive " +
-			"for energy generated from the sun </br> Site Rental Cost - The yearly cost of renting the site where your " +
-			"generation system is located. </br> Year Total - The total estimated income derived from your location over " +
-			"the year </br> Accumulated Total - The accumulated income derived from your location since the system was" +
-			" installed </br> ROI - The percentage return to you after the initial outlay has been subtracted", true);
-	
 	public void BuildROITab(){
 		ROITable.setText(0, 0, "Year");
 		ROITable.setText(1, 0, "Annual Generate");
@@ -500,16 +467,59 @@ public class SolarCalculator implements EntryPoint {
 		ROITable.setText(3, 0, "Accumulated Total");
 		ROITable.setText(4, 0, "ROI");
 		ROITable.getColumnFormatter().addStyleName(0, "ROITableHeader");
-		ROITable.setWidth("650px");
-		
-		ROINote.add(ROINoteHTML);
+		ROITable.setWidth("690px");
+		 
+		ROITable.setBorderWidth(1);
 		ROITabVerPanel.add(ROITitleLabel);
-		ROITitleLabel.addStyleName("TitleLabel");
-		ROITabVerPanel.add(ROIDescriptionHTML);
-		ROIDescriptionHTML.addStyleName("Description");
 		ROITabVerPanel.add(ROITable);
+		ROITabVerPanel.add(site);
 		ROITabVerPanel.add(ROINote);
+		ROITitleLabel.addStyleName("TitleLabel");
 	}
+	
+	private BarChart barChart;
+
+	public void buildChart(){
+		 ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
+		 chartLoader.loadApi(new Runnable() {
+		        @Override
+		        public void run() {
+		                // call method to show chart
+		        	ROITabVerPanel.add(getBarChart());
+		        	drawBarChart();
+		        }
+		 });
+
+	}
+	
+    private Widget getBarChart() {
+        if (barChart == null) {
+                barChart = new BarChart();
+        }
+        return barChart;
+    }
+   
+    private void drawBarChart() {
+        // Prepare the data
+        DataTable dataTable = DataTable.create();
+        dataTable.addColumn(ColumnType.STRING, "Name");
+        dataTable.addColumn(ColumnType.NUMBER, "Donuts eaten");
+        dataTable.addRows(4);
+        dataTable.setValue(0, 0, "Michael");
+        dataTable.setValue(1, 0, "Elisa");
+        dataTable.setValue(2, 0, "Robert");
+        dataTable.setValue(3, 0, "John");
+        dataTable.setValue(0, 1, 5);
+        dataTable.setValue(1, 1, 7);
+        dataTable.setValue(2, 1, 3);
+        dataTable.setValue(3, 1, 2);
+
+        // Draw the chart
+        barChart.draw(dataTable);
+}
+
+	
+
 
 	public void buildROITable(){
 		Double annuSaving;
