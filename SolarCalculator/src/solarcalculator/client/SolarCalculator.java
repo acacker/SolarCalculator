@@ -60,9 +60,9 @@ public class SolarCalculator implements EntryPoint {
 	private HorizontalPanel bodyPanel = new HorizontalPanel();
 	// Banner 
 	// ====================================================================
-	private Label Banner = new Label();
+	private HorizontalPanel Banner = new HorizontalPanel();
 	public void BuildBanner(){
-		Banner.setSize("1000px", "100px");
+		Banner.setSize("1000px", "140px");
 		Banner.setStyleName("banner");
 		
 	}
