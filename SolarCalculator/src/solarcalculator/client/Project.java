@@ -23,11 +23,10 @@ public class Project {
 	private Double annualSolarGen;
 	private Double dailySave;
 	private Double annualSave;
-	private Double paybackTime = 1.0;
+	private int paybackTime = 1;
 	private Double replacementGen = 4.5;
 	private Double exportGen;
-	private Double compountInvRate=0.05;
-	private Double culmulativeSave;
+	private Double culmulativeSave = 0.0;
 	
 	//advance information
 	private Double importTariff = 0.19;// increasing annually
@@ -155,17 +154,22 @@ public class Project {
 	}
 	
 	public void setPaybackTime() {
-		culmulativeSave = annualSave * paybackTime;
-		Double compoundInvReturn = indicativePrice * Math.pow(1 + compountInvRate, paybackTime);
-		while(culmulativeSave <= compoundInvReturn){
-			System.out.print(culmulativeSave <= compoundInvReturn);
+		int i = 0;
+		paybackTime = -1;
+		Double tempImportTaf = importTariff;
+		while(culmulativeSave < indicativePrice){
+			setYear(i);
+			setImportTariff(importTariff);
+			setAnnualSave();
+			culmulativeSave += annualSave;
 			paybackTime += 1;
-			culmulativeSave = annualSave * paybackTime;
-			compoundInvReturn = annualSave * Math.pow(1+compountInvRate, paybackTime);
+			i++;
 		}
-		
+		setYear(0);
+		setImportTariff(tempImportTaf);
+		culmulativeSave = 0.0;
 	}
-	public Double getPaybackTime(){
+	public Integer getPaybackTime(){
 		return paybackTime;
 	}
 

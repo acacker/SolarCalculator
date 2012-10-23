@@ -55,14 +55,16 @@ import com.googlecode.gwt.charts.client.options.VAxis;
 public class SolarCalculator implements EntryPoint {
 	private Project project;
 	private UseEnergy usedEnergy;
+	private Label warnning = new Label("* please fill this.");
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private HorizontalPanel bodyPanel = new HorizontalPanel();
 	// Banner 
 	// ====================================================================
-	private Label Banner = new Label("LPT Solar Calculator");
+	private Label Banner = new Label();
 	public void BuildBanner(){
 		Banner.setSize("1000px", "100px");
 		Banner.setStyleName("banner");
+		
 	}
 	// Output Panel
 	// ====================================================================
@@ -98,11 +100,34 @@ public class SolarCalculator implements EntryPoint {
 				case 2:
 					break;
 				case 3:
-					project.setReplacementGen(Double.parseDouble(energyUseYearTotalBox.getText()));
-					project.setImportTariff(Double.parseDouble(importTariffTextBox.getText()));
-					project.setAnnualTariffInc(Double.parseDouble(tariffIncrRateTextBox.getText())/100);
-					project.setFeedInFee(Double.parseDouble(feedInTariffTextBox.getText()));
-					project.setImportTariff(Double.parseDouble(importTariffTextBox.getText()));
+					if(projectLocationListBox.getSelectedIndex() == 0){
+						Window.alert("Please select a 'Location'");
+						return;
+					}else if(SystemPowerLB.getSelectedIndex() == 0){
+						Window.alert("Please select a 'System Power'");
+						return;
+					}else if(DailyHrTB.getText().isEmpty()){
+						Window.alert("Please input a ¡®Location¡¯");
+						return;
+					}else if(energyUseCalcInputTextBox.getText().isEmpty()){
+						Window.alert("Please input your 'used ennergy'");
+						return;
+					}else if(importTariffTextBox.getText().isEmpty()){
+						Window.alert("Please input a 'import tariff'");
+						return;
+					}else if(tariffIncrRateTextBox.getText().isEmpty()){
+						Window.alert("Please input a 'tariff increase rate'");
+						return;
+					}else if(feedInTariffTextBox.getText().isEmpty()){
+						Window.alert("Please input a 'feed in tariff'");
+						return;
+					}else{
+						project.setReplacementGen(Double.parseDouble(energyUseYearTotalBox.getText()));
+						project.setImportTariff(Double.parseDouble(importTariffTextBox.getText()));
+						project.setAnnualTariffInc(Double.parseDouble(tariffIncrRateTextBox.getText())/100);
+						project.setFeedInFee(Double.parseDouble(feedInTariffTextBox.getText()));
+						project.setImportTariff(Double.parseDouble(importTariffTextBox.getText()));
+					}
 					break;
 				}
 				project.setAnnualSolarGen();
@@ -112,14 +137,16 @@ public class SolarCalculator implements EntryPoint {
 				String indicativePrice =  project.parseNumberFormat(project.getIndicativePrice());
 				String annualOutput = project.parseNumberFormat(project.getAnnualSolarGen());
 				String yearlyValue = project.parseNumberFormat(project.getAnnualSave());
-				String paybackTime = project.parseNumberFormat(project.getPaybackTime());
+				String paybackTime = project.getPaybackTime().toString();
 				
 				outputPriceTextBox.setText(indicativePrice);
 				outputAnuOutTextBox.setText(annualOutput);
 				outputYearVTextBox.setText(yearlyValue);
 				outputPBTextBox.setText(paybackTime);
-			}
-		});
+				}
+			
+			});
+		
 		outputPriceHorPanel.add(outputPriceTitle);
 		outputPriceHorPanel.add(outputPriceTextBox);
 		
@@ -207,12 +234,16 @@ public class SolarCalculator implements EntryPoint {
 					tariffIncrRateTextBox.setText(incri2.toString());
 				break;
 				case 3:
+					
 					project = new Project(0.0,0.0);
-					energyUseCalcInputTextBox.setText("");
-					energyUseYearTotalBox.setText("");
-					importTariffTextBox.setText("");
-					feedInTariffTextBox.setText("");
-					tariffIncrRateTextBox.setText("");
+					projectLocationListBox.setSelectedIndex(0);
+					SystemPowerLB.setSelectedIndex(0);
+					DailyHrTB.setText(null);
+					energyUseCalcInputTextBox.setText(null);
+					energyUseYearTotalBox.setText(null);
+					importTariffTextBox.setText(null);
+					feedInTariffTextBox.setText(null);
+					tariffIncrRateTextBox.setText(null);
 				break;
 				}
 				outputNameTextBox.setText(projectSelectionListBox.getItemText(selected));
@@ -230,27 +261,29 @@ public class SolarCalculator implements EntryPoint {
 				// TODO Auto-generated method stub
 				switch(projectLocationListBox.getSelectedIndex()){
 				case 0:
+					project.setDailyHours(null);
+				case 1:
 					project.setDailyHours(5.0);
 					break;
-				case 1:
+				case 2:
 					project.setDailyHours(6.0);
 					break;
-				case 2:
+				case 3:
 					project.setDailyHours(9.0);
 					break;
-				case 3:
+				case 4:
 					project.setDailyHours(4.0);
 					break;
-				case 4:
+				case 5:
 					project.setDailyHours(6.5);
 					break;
-				case 5:
+				case 6:
 					project.setDailyHours(5.5);
 					break;
-				case 6:
+				case 7:
 					project.setDailyHours(3.0);
 					break;
-				case 7:
+				case 8:
 					project.setDailyHours(6.0);
 					break;
 				}
@@ -266,30 +299,33 @@ public class SolarCalculator implements EntryPoint {
 				// TODO Auto-generated method stub
 				switch(SystemPowerLB.getSelectedIndex()){
 				case 0:
+					project.setSystemPower(null);
+					project.setIndicativePrice(null);
+				case 1:
 					project.setSystemPower(3.0);
 					project.setIndicativePrice(8000.0);
 					break;
-				case 1:
+				case 2:
 					project.setSystemPower(4.0);
 					project.setIndicativePrice(10000.0);
 					break;
-				case 2:
+				case 3:
 					project.setSystemPower(5.0);
 					project.setIndicativePrice(12000.0);
 					break;
-				case 3:
+				case 4:
 					project.setSystemPower(7.0);
 					project.setIndicativePrice(14000.0);
 					break;
-				case 4:
+				case 5:
 					project.setSystemPower(9.0);
 					project.setIndicativePrice(16000.0);
 					break;
-				case 5:
+				case 6:
 					project.setSystemPower(12.0);
 					project.setIndicativePrice(18000.0);
 					break;
-				case 6:
+				case 7:
 					project.setSystemPower(18.0);
 					project.setIndicativePrice(20000.0);
 					break;
@@ -316,13 +352,14 @@ public class SolarCalculator implements EntryPoint {
 		projectLocationListBox.addItem("WA","8");
 		projectLocationListBox.setVisibleItemCount(0);
 		
-		SystemPowerLB.addItem("3.0","0");
-		SystemPowerLB.addItem("4.0","1");
-		SystemPowerLB.addItem("5.0","2");
-		SystemPowerLB.addItem("7.0","3");
-		SystemPowerLB.addItem("9.0","4");
-		SystemPowerLB.addItem("12.0","5");
-		SystemPowerLB.addItem("18.0","6");
+		SystemPowerLB.addItem("System Power", "0");
+		SystemPowerLB.addItem("3.0","1");
+		SystemPowerLB.addItem("4.0","2");
+		SystemPowerLB.addItem("5.0","3");
+		SystemPowerLB.addItem("7.0","4");
+		SystemPowerLB.addItem("9.0","5");
+		SystemPowerLB.addItem("12.0","6");
+		SystemPowerLB.addItem("18.0","7");
 		projectLocationListBox.setVisibleItemCount(0);
 		
 		

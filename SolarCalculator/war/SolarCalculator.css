@@ -12,14 +12,9 @@
 }
 
 .banner{
-	background-image: url("");
-	border:medium;
-	border-style: double;
-	padding: 10px;
-	border-color: gray;
+	background-image: url("image/Banner.png");
 	font-weight: bolder;
 	font-size: 50pt;
-	text-align: center;
 }
 
 .outputPanel{
